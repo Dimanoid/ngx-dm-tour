@@ -2,17 +2,17 @@ import { fakeAsync } from '@angular/core/testing';
 import { SpectatorHost, createHostFactory } from '@ngneat/spectator/jest';
 
 import { DmTourService } from '../dm-tour.service';
-import { DmTourComponent } from './dm-tour.component';
+import { DmTourRootComponent } from './dm-tour-root.component';
 
 describe('DmTourComponent', () => {
-    let spectator: SpectatorHost<DmTourComponent>;
+    let spectator: SpectatorHost<DmTourRootComponent>;
     const createHost = createHostFactory({
-        component: DmTourComponent,
+        component: DmTourRootComponent,
         providers: [DmTourService]
     });
 
     it('should be created', fakeAsync(() => {
-        spectator = createHost(`<dm-tour-component></dm-tour-component>`);
+        spectator = createHost(`<dm-tour-root></dm-tour-root>`);
         expect(spectator.component).toBeTruthy();
     }));
 

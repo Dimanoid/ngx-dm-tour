@@ -12,14 +12,14 @@ import { DmTourService } from '../dm-tour.service';
 export const MIN_ITEM_SIZE = 30;
 
 @Component({
-    selector: 'dm-tour-component',
+    selector: 'dm-tour-root',
     exportAs: 'dmTourComponent',
-    templateUrl: './dm-tour.component.html',
-    styleUrls: ['./dm-tour.component.scss'],
+    templateUrl: './dm-tour-root.component.html',
+    styleUrls: ['./dm-tour-root.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
     encapsulation: ViewEncapsulation.None
 })
-export class DmTourComponent implements OnInit, AfterViewInit, OnChanges, AfterContentInit {
+export class DmTourRootComponent implements OnInit, AfterViewInit, OnChanges, AfterContentInit {
     @HostBinding('class.tpl-component-css-class') _hostCss = true;
 
     @Input() @InputBoolean() booleanProperty: boolean = false;
