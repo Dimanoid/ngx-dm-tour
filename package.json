@@ -1,0 +1,49 @@
+{
+    "name": "%DM_LIB_TPL-NPM_SCOPE%/%DM_LIB_TPL-NPM_NAME%",
+    "version": "0.0.1",
+    "scripts": {
+        "build": "ng build lib",
+        "build:demo": "ng build --aot --prod --base-href /%DM_LIB_TPL-REPO_NAME%/ demo-app",
+        "test": "jest --verbose projects/lib",
+        "test:watch": "jest projects/lib --watch --notify",
+        "cover": "jest projects/lib --coverage",
+        "coverall": "jest projects/lib --coverage && cat ./coverage/lcov.info | coveralls",
+        "lint": "ng lint",
+        "publish": "npm publish dist/lib --access public",
+        "up": "git diff-index --quiet HEAD -- && cd projects/lib && npm version patch && git add package.json && git commit -m \"version bump [ci skip]\" package.json && cd ../.. && npm version patch",
+        "up:minor": "git diff-index --quiet HEAD -- && cd projects/lib && npm version minor && git add package.json && git commit -m \"version bump [ci skip]\" package.json && cd ../.. && npm version minor"
+    },
+    "dependencies": {
+        "@angular/animations": "~9.0.6",
+        "@angular/common": "~9.0.6",
+        "@angular/compiler": "~9.0.6",
+        "@angular/core": "~9.0.6",
+        "@angular/forms": "~9.0.6",
+        "@angular/platform-browser": "~9.0.6",
+        "@angular/platform-browser-dynamic": "~9.0.6",
+        "@angular/router": "~9.0.6",
+        "rxjs": "~6.5.4",
+        "tslib": "^1.11.1",
+        "zone.js": "~0.10.2"
+    },
+    "devDependencies": {
+        "@angular-builders/jest": "^9.0.0",
+        "@angular-devkit/build-angular": "~0.900.6",
+        "@angular-devkit/build-ng-packagr": "~0.900.6",
+        "@angular/cli": "~9.0.6",
+        "@angular/compiler-cli": "~9.0.6",
+        "@angular/language-service": "~9.0.6",
+        "@ngneat/spectator": "^5.3.1",
+        "@types/jest": "^25.1.4",
+        "@types/node": "~13.9.1",
+        "codelyzer": "^5.2.1",
+        "jest": "^25.1.0",
+        "jest-preset-angular": "^8.1.2",
+        "resize-observer-polyfill": "^1.5.1",
+        "ng-packagr": "^9.0.3",
+        "ts-node": "~8.6.2",
+        "tsickle": "^0.38.1",
+        "tslint": "~6.1.0",
+        "typescript": "~3.8.3"
+    }
+}

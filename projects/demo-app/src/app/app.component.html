@@ -1,0 +1,35 @@
+<div class="dm-page layout fit vertical">
+    <h1>DmLibTemplate demo</h1>
+    <div class="layout flex relative">
+
+        <div class="dm-panel layout fit">
+            <div class="dm-panel-left layout" [style.width.px]="divider['d1'].size">
+                <div class="layout flex relative">
+                    <div class="layout vertical fit scroll">
+                        <b class="mb1 fs-l">Lib options:</b>
+                        <div class="layout center">
+                            Option
+                        </div>
+                    </div>
+                </div>
+                <div dm-divider class="dm-divider-vert layout center-center" style="width: 12px"
+                    enabled="true"
+                    [class.dm-divider-moving]="divider['d1'].moving"
+                    (dmDividerDragStart)="dividerDragStart('d1', $event)"
+                    (dmDividerDragEnd)="dividerDragEnd('d1', $event)"
+                    (dmDividerMove)="dividerMove('d1', $event)">
+                    <div class="dm-divider-inner"></div>
+                </div>
+            </div>
+
+            <div class="layout flex relative">
+                <div class="layout fit scroll">
+
+                    Lib demo
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
