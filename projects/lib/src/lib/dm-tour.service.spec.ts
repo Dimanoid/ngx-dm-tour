@@ -1,10 +1,10 @@
 import { createServiceFactory, SpectatorService } from '@ngneat/spectator';
 
-import { DmLibTplService } from './dm-lib-tpl.service';
+import { DmTourService } from './dm-tour.service';
 
-describe('DmLibTplService', () => {
-    let spectator: SpectatorService<DmLibTplService>;
-    const createService = createServiceFactory(DmLibTplService);
+describe('DmTourService', () => {
+    let spectator: SpectatorService<DmTourService>;
+    const createService = createServiceFactory(DmTourService);
 
     beforeEach(() => spectator = createService());
 

@@ -19,10 +19,10 @@
       "dom"
     ],
     "paths": {
-      "%DM_LIB_TPL-NPM_SCOPE%/%DM_LIB_TPL-NPM_NAME%": [
+      "@dimanoid/ngx-dm-tour": [
         "dist/lib"
       ],
-      "%DM_LIB_TPL-NPM_SCOPE%/%DM_LIB_TPL-NPM_NAME%/*": [
+      "@dimanoid/ngx-dm-tour/*": [
         "dist/lib/*"
       ]
     }

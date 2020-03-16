@@ -1,3 +1,3 @@
-export { DmLibTplModule } from './lib/dm-lib-tpl.module';
-export { DmLibTplService } from './lib/dm-lib-tpl.service';
-export { DmLibTplComponent } from './lib/tpl-component/dm-lib-tpl.component';
+export { DmTourModule } from './lib/dm-tour.module';
+export { DmTourService } from './lib/dm-tour.service';
+export { DmTourComponent } from './lib/dm-tour/dm-tour.component';

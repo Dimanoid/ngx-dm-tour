@@ -1,9 +1,9 @@
 {
-    "name": "%DM_LIB_TPL-NPM_SCOPE%/%DM_LIB_TPL-NPM_NAME%",
+    "name": "@dimanoid/ngx-dm-tour",
     "version": "0.0.1",
     "scripts": {
         "build": "ng build lib",
-        "build:demo": "ng build --aot --prod --base-href /%DM_LIB_TPL-REPO_NAME%/ demo-app",
+        "build:demo": "ng build --aot --prod --base-href /ngx-dm-tour/ demo-app",
         "test": "jest --verbose projects/lib",
         "test:watch": "jest projects/lib --watch --notify",
         "cover": "jest projects/lib --coverage",
@@ -44,6 +44,6 @@
         "ts-node": "~8.6.2",
         "tsickle": "^0.38.1",
         "tslint": "~6.1.0",
-        "typescript": "~3.8.3"
+        "typescript": "~3.7.5"
     }
 }

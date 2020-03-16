@@ -1,17 +1,17 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { DmLibTplComponent } from './tpl-component/dm-lib-tpl.component';
+import { DmTourComponent } from './dm-tour/dm-tour.component';
 
 @NgModule({
     declarations: [
-        DmLibTplComponent
+        DmTourComponent
     ],
     imports: [
         CommonModule
     ],
     exports: [
-        DmLibTplComponent
+        DmTourComponent
     ]
 })
-export class DmLibTplModule { }
+export class DmTourModule { }

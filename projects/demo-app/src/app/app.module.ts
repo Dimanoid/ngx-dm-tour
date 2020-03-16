@@ -6,7 +6,7 @@ import { NgModule } from '@angular/core';
 
 import { DmDividerModule } from './dm-divider.module';
 
-import { DmLibTplModule } from '%DM_LIB_TPL-NPM_SCOPE%/%DM_LIB_TPL-NPM_NAME%';
+import { DmTourModule } from '@dimanoid/ngx-dm-tour';
 
 import { AppComponent } from './app.component';
 
@@ -17,7 +17,7 @@ import { AppComponent } from './app.component';
     imports: [
         BrowserModule, BrowserAnimationsModule, CommonModule,
         FormsModule, ReactiveFormsModule,
-        DmDividerModule, DmLibTemplateModule
+        DmDividerModule, DmTourModule
     ],
     bootstrap: [AppComponent]
 })
