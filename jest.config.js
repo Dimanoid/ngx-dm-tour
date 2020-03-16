@@ -15,6 +15,9 @@ module.exports = {
     transform: {
         '^.+\\.(ts|js|html)$': 'ts-jest'
     },
+    setupFilesAfterEnv: [
+        '<rootDir>/node_modules/@angular-builders/jest/dist/jest-config/setup.js'
+    ],
     testMatch: [
         '**/+(*.)+(spec|test).+(ts|js)?(x)'
     ],
