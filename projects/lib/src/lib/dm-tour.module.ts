@@ -1,17 +1,18 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { DmTourComponent } from './dm-tour/dm-tour.component';
+import { DmTourRootComponent } from './tour-root/dm-tour-root.component';
+import { DmTourDirective } from './dm-tour.directive'
 
 @NgModule({
     declarations: [
-        DmTourComponent
+        DmTourRootComponent, DmTourDirective
     ],
     imports: [
         CommonModule
     ],
     exports: [
-        DmTourComponent
+        DmTourRootComponent, DmTourDirective
     ]
 })
 export class DmTourModule { }

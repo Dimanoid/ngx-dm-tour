@@ -9,8 +9,6 @@ import { InputNumber, InputBoolean } from '../utils';
 
 import { DmTourService } from '../dm-tour.service';
 
-export const MIN_ITEM_SIZE = 30;
-
 @Component({
     selector: 'dm-tour-root',
     exportAs: 'dmTourComponent',

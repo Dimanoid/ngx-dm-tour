@@ -1,3 +1,4 @@
 export { DmTourModule } from './lib/dm-tour.module';
 export { DmTourService } from './lib/dm-tour.service';
-export { DmTourComponent } from './lib/dm-tour/dm-tour.component';
+export { DmTourDirective } from './lib/dm-tour.directive';
+export { DmTourRootComponent } from './lib/tour-root/dm-tour-root.component';

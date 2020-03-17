@@ -19,7 +19,7 @@ export class DmTourDirective implements AfterViewInit, OnDestroy {
             console.warn('[dm-tour] tour element ID must be in form "sectionID.ItemID": ', this.item);
             return;
         }
-        this._ts.register(path[0], path[1], this._el, typeof this.item == 'string' ? undefined : this.item.position);
+        this._ts.registerControl(path[0], path[1], this._el, typeof this.item == 'string' ? undefined : this.item.position);
     }
 
     ngOnDestroy() {
@@ -30,7 +30,7 @@ export class DmTourDirective implements AfterViewInit, OnDestroy {
         if (!path || path.length != 2) {
             return;
         }
-        this._ts.unregister(path[0], path[path.length - 1]);
+        this._ts.unregisterControl(path[0], path[path.length - 1]);
     }
 
 }
