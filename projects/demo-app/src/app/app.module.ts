@@ -6,8 +6,12 @@ import { NgModule } from '@angular/core';
 
 import { DmDividerModule } from './dm-divider.module';
 
-import { DmTourModule } from '@dimanoid/ngx-dm-tour';
+import { NzButtonModule, NZ_I18N, en_US } from 'ng-zorro-antd';
+import { registerLocaleData } from '@angular/common';
+import en from '@angular/common/locales/en';
+registerLocaleData(en);
 
+import { DmTourModule } from '@dimanoid/ngx-dm-tour';
 import { AppComponent } from './app.component';
 
 @NgModule({
@@ -17,7 +21,11 @@ import { AppComponent } from './app.component';
     imports: [
         BrowserModule, BrowserAnimationsModule, CommonModule,
         FormsModule, ReactiveFormsModule,
+        NzButtonModule,
         DmDividerModule, DmTourModule
+    ],
+    providers: [
+        { provide: NZ_I18N, useValue: en_US },
     ],
     bootstrap: [AppComponent]
 })

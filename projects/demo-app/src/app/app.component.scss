@@ -13,6 +13,18 @@
                 color: steelblue;
             }
         }
+        .dm-panel-demo {
+            margin: 10px;
+            padding: 10px;
+            border: 1px dashed steelblue;
+            min-width: 4000px;
+            min-height: 3000px;
+            .dm-poi {
+                border: 1px solid #ccc;
+                border-radius: 8px;
+                padding: 50px;
+            }
+        }
     }
 }
 

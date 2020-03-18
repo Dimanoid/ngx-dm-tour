@@ -6,9 +6,11 @@
             <div class="dm-panel-left layout" [style.width.px]="divider['d1'].size">
                 <div class="layout flex relative">
                     <div class="layout vertical fit scroll">
-                        <b class="mb1 fs-l">Lib options:</b>
+                        <b class="mb1 fs-l">Options:</b>
                         <div class="layout center">
-                            Option
+                            <button nz-button nzType="primary" (click)="showHelp()">
+                                Show help
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -25,7 +27,15 @@
             <div class="layout flex relative">
                 <div class="layout fit scroll">
 
-                    Lib demo
+                    <div class="dm-panel-demo relative">
+                        <div class="dm-poi layout center-center" style="width: 150px; height: 100px">
+                            <span>Some point of interest</span>
+                        </div>
+                        <button nz-button nzType="primary" nzShape="round" nzGhost style="margin: 100px 0 0 200px">Some button</button>
+                        <div class="dm-poi layout center-center" style="width: 250px; height: 150px; position: absolute; left: 400px; top: 70px">
+                            <span>Some other point of interest</span>
+                        </div>
+                    </div>
 
                 </div>
             </div>

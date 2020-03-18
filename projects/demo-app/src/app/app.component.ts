@@ -67,4 +67,8 @@ export class AppComponent implements OnInit {
         }
     }
 
+    showHelp() {
+        
+    }
+
 }
