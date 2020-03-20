@@ -28,10 +28,29 @@
                 <div class="layout fit scroll">
 
                     <div class="dm-panel-demo relative">
+                        <div class="layout end-justified" style="width: 1000px">
+                            <div [dm-tour]="{ id: 's1.tb1', shape: 'square' }">
+                                <nz-button-group>
+                                    <button nz-button nzType="default">S</button>
+                                    <button nz-button nzType="default">O</button>
+                                    <button nz-button nzType="default">M</button>
+                                    <button nz-button nzType="default">E</button>
+                                </nz-button-group>                            
+                                <nz-button-group class="ml1">
+                                    <button nz-button nzType="default">T</button>
+                                    <button nz-button nzType="default">O</button>
+                                    <button nz-button nzType="default">O</button>
+                                    <button nz-button nzType="default">L</button>
+                                    <button nz-button nzType="default">B</button>
+                                    <button nz-button nzType="default">A</button>
+                                    <button nz-button nzType="default">R</button>
+                                </nz-button-group>                            
+                            </div>
+                        </div>
                         <div class="dm-poi layout center-center" style="width: 150px; height: 100px" dm-tour="s1.poi1">
                             <span>Some point of interest</span>
                         </div>
-                        <button nz-button nzType="primary" nzShape="round" nzGhost style="margin: 100px 0 0 200px" dm-tour="s1.poi2">Some button</button>
+                        <button nz-button nzType="primary" nzShape="round" nzGhost style="margin: 100px 0 0 200px" dm-tour="s1.btn1">Some button</button>
                         <div class="dm-poi layout center-center" style="width: 250px; height: 150px; position: absolute; left: 400px; top: 70px" dm-tour="s1.poi2">
                             <span>Some other point of interest</span>
                         </div>

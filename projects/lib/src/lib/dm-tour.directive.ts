@@ -5,7 +5,7 @@ import { DmTourService } from './dm-tour.service';
     selector: '[dm-tour]'
 })
 export class DmTourDirective implements AfterViewInit, OnDestroy {
-    @Input('dm-tour') item: string | { id: string, position: string };
+    @Input('dm-tour') item: string | { id: string, position: string, shape: string };
 
     constructor(private _el: ElementRef, private _ts: DmTourService) {
     }
@@ -19,7 +19,13 @@ export class DmTourDirective implements AfterViewInit, OnDestroy {
             console.warn('[dm-tour] tour element ID must be in form "sectionID.ItemID": ', this.item);
             return;
         }
-        this._ts.registerControl(path[0], path[1], this._el, typeof this.item == 'string' ? undefined : this.item.position);
+        this._ts.registerControl(
+            path[0],
+            path[1],
+            this._el,
+            typeof this.item == 'string' ? undefined : this.item.position,
+            typeof this.item == 'string' ? undefined : this.item.shape
+        );
     }
 
     ngOnDestroy() {

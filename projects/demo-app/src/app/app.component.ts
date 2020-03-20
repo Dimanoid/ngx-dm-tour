@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { Point } from './dm-divider.module';
+import { DmTourService } from '@dimanoid/ngx-dm-tour';
 
 @Component({
     selector: 'app-root',
@@ -21,7 +22,7 @@ export class AppComponent implements OnInit {
         }
     } = {};
 
-    constructor() {
+    constructor(private _tour: DmTourService) {
         this.divider['d1'] = { min: 200, max: 700, vertical: true, size: 300 };
     }
 
@@ -68,7 +69,7 @@ export class AppComponent implements OnInit {
     }
 
     showHelp() {
-        
+        this._tour.showControlsHelp('s1');
     }
 
 }
