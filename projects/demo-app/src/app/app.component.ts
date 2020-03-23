@@ -10,6 +10,8 @@ import { DmTourService } from '@dimanoid/ngx-dm-tour';
 })
 export class AppComponent implements OnInit {
 
+    clicked: boolean = false;
+
     public divider: {
         [name: string]: {
             min: number,
@@ -27,6 +29,12 @@ export class AppComponent implements OnInit {
     }
 
     ngOnInit() {
+        setTimeout(() => {
+            if (!this.clicked) {
+                this.clicked = true;
+                this._tour.showControlsHelp('s0');
+            }
+        }, 5000);
     }
 
     log(...args) {
@@ -68,8 +76,9 @@ export class AppComponent implements OnInit {
         }
     }
 
-    showHelp() {
-        this._tour.showControlsHelp('s1');
+    showHelp(section: string) {
+        this.clicked = true;
+        this._tour.showHelp(section);
     }
 
 }

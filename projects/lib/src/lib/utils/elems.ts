@@ -13,7 +13,6 @@ export function isElemVisible(elem: HTMLElement): boolean {
                 || (left <= rect.right === false)
                 || ((left + width) <= rect.left)
             ) {
-                console.log('2:', { el, rect });
                 return false;
             }
         }

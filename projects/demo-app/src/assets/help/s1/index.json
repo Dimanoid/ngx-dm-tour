@@ -1,0 +1,36 @@
+{
+    "controls": [
+        {
+            "id": "p1",
+            "text": "Some description for the control - bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla"
+        },
+        {
+            "id": "p2",
+            "text": "Some description for the control - bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla"
+        },
+        {
+            "id": "tb1",
+            "text": "Some description for the control - bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla"
+        },
+        {
+            "id": "be",
+            "text": "Some description for the control - bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla"
+        },
+        {
+            "id": "tobe",
+            "text": "Some description for the control - bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla"
+        },
+        {
+            "id": "poi1",
+            "text": "Some description for the control - bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla"
+        },
+        {
+            "id": "poi2",
+            "text": "Some description for the control - bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla"
+        },
+        {
+            "id": "btn1",
+            "text": "Some description for the control - bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla"
+        }
+    ]
+}

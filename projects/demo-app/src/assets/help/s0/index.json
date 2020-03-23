@@ -1,0 +1,8 @@
+{
+    "controls": [
+        {
+            "id": "help",
+            "text": "This button will show help for the right side section"
+        }
+    ]
+}

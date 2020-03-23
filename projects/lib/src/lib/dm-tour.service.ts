@@ -31,6 +31,7 @@ export class DmTourService {
         if (!sectionId || !id || !el) {
             return;
         }
+        console.log(sectionId, id);
         if (!this._controls[sectionId]) {
             this._controls[sectionId] = {};
         }
@@ -100,7 +101,6 @@ export class DmTourService {
             if (!isElemVisible(el) || !b || b.width == 0 || b.height == 0) {
                 continue;
             }
-            console.log({ el, b });
             count++;
             if (c.shape == 'square') {
                 const hl = R.createElement('rect', 'svg');
@@ -140,7 +140,7 @@ export class DmTourService {
         R.setAttribute(rect, 'height', '10000');
         R.setAttribute(rect, 'x', '0');
         R.setAttribute(rect, 'y', '0');
-        R.setAttribute(rect, 'fill', 'var(--ngx-dm-tour-hl-bg, black)');
+        R.setAttribute(rect, 'fill', 'var(--ngx-dm-tour-backdrop-color, black)');
         R.setAttribute(rect, 'mask', 'url(#ngxDmTourControlsMask)');
         R.appendChild(svg, rect);
         R.setAttribute(svg, 'id', 'ngxDmTourBackdrop');
@@ -161,13 +161,54 @@ export class DmTourService {
         this._hlVisible = true;
         R.appendChild(this.document.body, this._root);
         setTimeout(() => {
-            R.setStyle(this._root, 'opacity', 'var(--ngx-dm-tour-hl-stroke-opacity, .3)');
+            R.setStyle(this._root, 'opacity', 'var(--ngx-dm-tour-backdrop-opacity, .3)');
+            this._onClickRemove = R.listen(this.document, 'click', e => this.hideControlsHelp(e));
+            this._onKeyupRemove = R.listen(this.document, 'keyup', e => this.hideControlsHelp(e));
+        });
+    }
+
+    showHelp(sectionId: string) {
+        if (this._hlVisible) {
+            return;
+        }
+        const ids: string[] = this._controls[sectionId] ? Object.keys(this._controls[sectionId]) : [];
+        if (!ids || ids.length == 0) {
+            console.warn(`[ngx-dm-tour] There are no visible controls registered for the section "${sectionId}"`);
+            return;
+        }
+        const MR = Math.round;
+        const R = this._r2;
+        const bd = this.document.querySelector('ngxDmTourBackdrop');
+        if (bd) {
+            R.removeChild(this.document.body, bd);
+        }
+
+        this._root = R.createElement('div');
+        R.setStyle(this._root, 'position', 'fixed');
+        R.setStyle(this._root, 'z-index', '9999');
+        R.setStyle(this._root, 'top', '0');
+        R.setStyle(this._root, 'right', '0');
+        R.setStyle(this._root, 'bottom', '0');
+        R.setStyle(this._root, 'left', '0');
+        R.setStyle(this._root, 'overflow', 'hidden');
+        R.setStyle(this._root, 'opacity', '0');
+        R.setStyle(this._root, 'transition', 'opacity 1s');
+
+        this.document.activeElement.blur();
+        this._hlVisible = true;
+        R.appendChild(this.document.body, this._root);
+        setTimeout(() => {
+            R.setStyle(this._root, 'opacity', 'var(--ngx-dm-tour-backdrop-opacity, .3)');
             this._onClickRemove = R.listen(this.document, 'click', e => this.hideControlsHelp(e));
             this._onKeyupRemove = R.listen(this.document, 'keyup', e => this.hideControlsHelp(e));
         });
     }
 
     hideControlsHelp(e?: Event) {
+        this.hideHelp(e);
+    }
+
+    hideHelp(e?: Event) {
         if (e) {
             e.stopImmediatePropagation();
             e.preventDefault();

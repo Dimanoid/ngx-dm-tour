@@ -17,12 +17,44 @@
             margin: 10px;
             padding: 10px;
             border: 1px dashed steelblue;
-            min-width: 4000px;
-            min-height: 3000px;
+            min-width: 2500px;
+            min-height: 2500px;
             .dm-poi {
                 border: 1px solid #ccc;
                 border-radius: 8px;
                 padding: 50px;
+            }
+            .dm-pointer-right,
+            .dm-pointer-bottom {
+                border: 2px solid rgba(#080, .5);
+                color: #080;
+                margin: 10px;
+                padding: 20px;
+                border-radius: 8px;
+                position: relative;
+                background: rgba(#080, .1);
+                text-align: center;
+                &:before {
+                    border: 2px solid;
+                    border-color: transparent rgba(#080, .5) rgba(#080, .5) transparent;
+                    background: #e5f3e5;
+                    content: " ";
+                    position: absolute;
+                }
+            }
+            .dm-pointer-right:before {
+                right: -10px;
+                top: calc(50% - 10px);
+                width: 20px;
+                height: 20px;
+                transform: rotate(-45deg);
+            }
+            .dm-pointer-bottom:before {
+                bottom: -10px;
+                left: calc(50% - 10px);
+                width: 20px;
+                height: 20px;
+                transform: rotate(45deg);
             }
         }
     }
