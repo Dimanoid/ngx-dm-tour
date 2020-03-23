@@ -13,6 +13,11 @@ export class DmTourService {
     private _controls: { [sectionId: string]: { [id: string]: DmTourControl } } = {};
 
     private _r2: Renderer2;
+    private _root: any;
+    private _onClickRemove: () => void;
+    private _onKeyupRemove: () => void;
+
+    private _hlVisible: boolean = false;
 
     constructor(
         private _rendererFactory: RendererFactory2,
@@ -45,9 +50,12 @@ export class DmTourService {
     }
 
     showControlsHelp(sectionId: string) {
+        if (this._hlVisible) {
+            return;
+        }
         const ids: string[] = this._controls[sectionId] ? Object.keys(this._controls[sectionId]) : [];
         if (!ids || ids.length == 0) {
-            console.warn(`[ngx-dm-tour] There are no controls registered for the section "${sectionId}"`);
+            console.warn(`[ngx-dm-tour] There are no visible controls registered for the section "${sectionId}"`);
             return;
         }
         const MR = Math.round;
@@ -92,6 +100,7 @@ export class DmTourService {
             if (!isElemVisible(el) || !b || b.width == 0 || b.height == 0) {
                 continue;
             }
+            console.log({ el, b });
             count++;
             if (c.shape == 'square') {
                 const hl = R.createElement('rect', 'svg');
@@ -102,8 +111,8 @@ export class DmTourService {
                 R.setAttribute(hl, 'rx', '8');
                 R.setAttribute(hl, 'fill', 'black');
                 R.setAttribute(hl, 'stroke', 'black');
-                R.setAttribute(hl, 'stroke-width', '15');
-                R.setAttribute(hl, 'stroke-opacity', '.3');
+                R.setAttribute(hl, 'stroke-width', 'var(--ngx-dm-tour-hl-stroke-width, 15)');
+                R.setAttribute(hl, 'stroke-opacity', 'var(--ngx-dm-tour-hl-stroke-opacity, .3)');
                 R.appendChild(mask, hl);
             }
             else {
@@ -114,13 +123,13 @@ export class DmTourService {
                 R.setAttribute(hl, 'r', '' + MR(r + 25));
                 R.setAttribute(hl, 'fill', 'black');
                 R.setAttribute(hl, 'stroke', 'black');
-                R.setAttribute(hl, 'stroke-width', '15');
-                R.setAttribute(hl, 'stroke-opacity', '.3');
+                R.setAttribute(hl, 'stroke-width', 'var(--ngx-dm-tour-hl-stroke-width, 15)');
+                R.setAttribute(hl, 'stroke-opacity', 'var(--ngx-dm-tour-hl-stroke-opacity, .3)');
                 R.appendChild(mask, hl);
             }
         }
         if (count == 0) {
-            console.warn(`[ngx-dm-tour] There are no controls registered for the section "${sectionId}"`);
+            console.warn(`[ngx-dm-tour] There are no visible controls registered for the section "${sectionId}"`);
             return;
         }
         R.appendChild(defs, mask);
@@ -131,25 +140,57 @@ export class DmTourService {
         R.setAttribute(rect, 'height', '10000');
         R.setAttribute(rect, 'x', '0');
         R.setAttribute(rect, 'y', '0');
-        R.setAttribute(rect, 'fill', 'black');
+        R.setAttribute(rect, 'fill', 'var(--ngx-dm-tour-hl-bg, black)');
         R.setAttribute(rect, 'mask', 'url(#ngxDmTourControlsMask)');
         R.appendChild(svg, rect);
         R.setAttribute(svg, 'id', 'ngxDmTourBackdrop');
         R.setAttribute(svg, 'width', '10000px');
         R.setAttribute(svg, 'height', '10000px');
-        const div = R.createElement('div');
-        R.setStyle(div, 'position', 'fixed');
-        R.setStyle(div, 'z-index', '9999');
-        R.setStyle(div, 'top', '0');
-        R.setStyle(div, 'right', '0');
-        R.setStyle(div, 'bottom', '0');
-        R.setStyle(div, 'left', '0');
-        R.setStyle(div, 'overflow', 'hidden');
-        R.setStyle(div, 'opacity', '0');
-        R.setStyle(div, 'transition', 'opacity 1s');
-        R.appendChild(div, svg);
-        R.appendChild(this.document.body, div);
-        setTimeout(() => R.setStyle(div, 'opacity', '.2'));
+        this._root = R.createElement('div');
+        R.setStyle(this._root, 'position', 'fixed');
+        R.setStyle(this._root, 'z-index', '9999');
+        R.setStyle(this._root, 'top', '0');
+        R.setStyle(this._root, 'right', '0');
+        R.setStyle(this._root, 'bottom', '0');
+        R.setStyle(this._root, 'left', '0');
+        R.setStyle(this._root, 'overflow', 'hidden');
+        R.setStyle(this._root, 'opacity', '0');
+        R.setStyle(this._root, 'transition', 'opacity 1s');
+        R.appendChild(this._root, svg);
+        this.document.activeElement.blur();
+        this._hlVisible = true;
+        R.appendChild(this.document.body, this._root);
+        setTimeout(() => {
+            R.setStyle(this._root, 'opacity', 'var(--ngx-dm-tour-hl-stroke-opacity, .3)');
+            this._onClickRemove = R.listen(this.document, 'click', e => this.hideControlsHelp(e));
+            this._onKeyupRemove = R.listen(this.document, 'keyup', e => this.hideControlsHelp(e));
+        });
+    }
+
+    hideControlsHelp(e?: Event) {
+        if (e) {
+            e.stopImmediatePropagation();
+            e.preventDefault();
+        }
+        if (this._onClickRemove) {
+            this._onClickRemove();
+            this._onClickRemove = null;
+        }
+        if (this._onKeyupRemove) {
+            this._onKeyupRemove();
+            this._onKeyupRemove = null;
+        }
+        if (this._root && this._r2) {
+            this._r2.setStyle(this._root, 'transition', 'opacity .5s');
+            this._r2.setStyle(this._root, 'opacity', '0');
+            setTimeout(() => {
+                this._r2.removeChild(this.document.body, this._root);
+                this._hlVisible = false;
+            }, 500);
+        }
+        else {
+            this._hlVisible = false;
+        }
     }
 
     private _getBoundaries(el: any): DOMRect {
