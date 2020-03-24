@@ -30,7 +30,7 @@ export class DmTourDirective implements AfterViewInit, OnDestroy {
         if (!this.item) {
             return;
         }
-        const path = typeof this.item == 'string' ? this.item.split('.') : this.item.id.split('.');
+        const path = this.item.split('.');
         if (!path || path.length != 2) {
             return;
         }

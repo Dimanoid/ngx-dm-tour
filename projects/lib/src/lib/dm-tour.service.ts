@@ -317,6 +317,7 @@ export class DmTourService {
             this._r2.setStyle(this._root, 'transition', 'opacity .5s');
             this._r2.setStyle(this._root, 'opacity', '0');
             setTimeout(() => {
+                this._r2.setStyle(this._root, 'transition', 'opacity 1s');
                 this._r2.removeChild(this.document.body, this._root);
                 this._hlVisible = false;
             }, 500);
