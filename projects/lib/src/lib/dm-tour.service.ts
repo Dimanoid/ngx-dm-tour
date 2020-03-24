@@ -1,15 +1,17 @@
 import { Injectable, ElementRef, Inject, Optional, RendererFactory2, Renderer2 } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
+import { HttpClient, HttpParams } from '@angular/common/http';
 
 import { DmTourConfig, DmTourSection, DmTourControl } from './models';
 import { isElemVisible } from './utils';
+import { Observable } from 'rxjs';
 
 @Injectable({
     providedIn: 'root'
 })
 export class DmTourService {
 
-    private _sections: { [id: string]: DmTourSection } = {};
+    private _sections: { [id: string]: DmTourSection };
     private _controls: { [sectionId: string]: { [id: string]: DmTourControl } } = {};
 
     private _r2: Renderer2;
@@ -21,17 +23,24 @@ export class DmTourService {
 
     constructor(
         private _rendererFactory: RendererFactory2,
+        private _http: HttpClient,
         @Inject(DOCUMENT) private document,
-        @Inject('dmTourRootPath') @Optional() private _cfg: DmTourConfig
+        @Inject('dmTourConfig') @Optional() private _cfg: DmTourConfig
     ) {
         if (!this._cfg) {
             this._cfg =  new DmTourConfig();
         }
         this._r2 = this._rendererFactory.createRenderer(null, null);
         console.log('config:', this._cfg);
+        if (this._cfg.loadIndexOnStart) {
+            this._loadSections().subscribe(
+                () => {},
+                err => this._handleLoadError(err)
+            );
+        }
     }
 
-    registerControl(sectionId: string, id: string, el: ElementRef, position?: string, shape?: string) {
+    registerControl(sectionId: string, id: string, el: ElementRef) {
         if (!sectionId || !id || !el) {
             return;
         }
@@ -41,9 +50,7 @@ export class DmTourService {
         if (!this._controls[sectionId][id]) {
             this._controls[sectionId][id] = { id };
         }
-        this._controls[sectionId][id].pos = position;
         this._controls[sectionId][id].el = el.nativeElement;
-        this._controls[sectionId][id].shape = shape && shape == 'square' ? 'square' : 'circle';
     }
 
     unregisterControl(sectionId: string, id: string) {
@@ -57,6 +64,85 @@ export class DmTourService {
         if (this._hlVisible) {
             return;
         }
+        if (!this._sections) {
+            this._loadSections().subscribe(
+                () => {
+                    this._loadSectionControls(sectionId).subscribe(
+                        () => this._showControlsHelp(sectionId),
+                        err => this._handleLoadError(err)
+                    );
+                },
+                err => this._handleLoadError(err)
+            );
+        }
+        else if (!this._sections[sectionId]) {
+            this._handleLoadError(`There is no a section "${sectionId}" defined.`);
+        }
+        else if (this._sections[sectionId] && !this._sections[sectionId].controlsLoaded) {
+            this._loadSectionControls(sectionId).subscribe(
+                () => this._showControlsHelp(sectionId),
+                err => this._handleLoadError(err)
+            );
+        }
+        else {
+            this._showControlsHelp(sectionId);
+        }
+    }
+
+    private _loadSections(): Observable<void> {
+        this._showLoading();
+        return new Observable(obs => {
+            this._http.get<{ sections: DmTourSection[] }>(this._cfg.rootPath + '/index.json').subscribe(
+                res => {
+                    console.log('sections:', res);
+                    this._hideLoading();
+                    if (res && res.sections) {
+                        this._sections = {};
+                        for (const section of res.sections) {
+                            this._sections[section.id] = section;
+                        }
+                        obs.next();
+                    }
+                    else {
+                        obs.error('Wrong data format in ${this._cfg.rootPath}/index.json');
+                    }
+                },
+                err => {
+                    this._hideLoading();
+                    obs.error(err);
+                }
+            );
+        });
+    }
+
+    private _loadSectionControls(sectionId: string): Observable<void> {
+        this._showLoading();
+        return new Observable(obs => {
+            this._http.get<{ controls: DmTourControl[] }>(`${this._cfg.rootPath}/${sectionId}/index.json`).subscribe(
+                res => {
+                    console.log('controls:', res);
+                    this._hideLoading();
+                    if (res && res.controls) {
+                        for (const ctrl of res.controls) {
+                            const c = this._controls[sectionId][ctrl.id];
+                            this._controls[sectionId][ctrl.id] = ctrl;
+                            this._controls[sectionId][ctrl.id].el = c ? c.el : null;
+                        }
+                        obs.next();
+                    }
+                    else {
+                        obs.error('${this._cfg.rootPath}/${sectionId}/index.json');
+                    }
+                },
+                err => {
+                    this._hideLoading();
+                    obs.error(err);
+                }
+            );
+        });
+    }
+
+    private _showControlsHelp(sectionId: string) {
         const ids: string[] = this._controls[sectionId] ? Object.keys(this._controls[sectionId]) : [];
         if (!ids || ids.length == 0) {
             console.warn(`[ngx-dm-tour] There are no visible controls registered for the section "${sectionId}"`);
@@ -64,7 +150,7 @@ export class DmTourService {
         }
         const MR = Math.round;
         const R = this._r2;
-        const bd = this.document.querySelector('ngxDmTourBackdrop');
+        const bd = this.document.querySelector('#ngxDmTourBackdrop');
         if (bd) {
             R.removeChild(this.document.body, bd);
         }
@@ -146,25 +232,26 @@ export class DmTourService {
         R.setAttribute(rect, 'fill', 'var(--ngx-dm-tour-backdrop-color, black)');
         R.setAttribute(rect, 'mask', 'url(#ngxDmTourControlsMask)');
         R.appendChild(svg, rect);
-        R.setAttribute(svg, 'id', 'ngxDmTourBackdrop');
         R.setAttribute(svg, 'width', '10000px');
         R.setAttribute(svg, 'height', '10000px');
-        this._root = R.createElement('div');
-        R.setStyle(this._root, 'position', 'fixed');
-        R.setStyle(this._root, 'z-index', '9999');
-        R.setStyle(this._root, 'top', '0');
-        R.setStyle(this._root, 'right', '0');
-        R.setStyle(this._root, 'bottom', '0');
-        R.setStyle(this._root, 'left', '0');
-        R.setStyle(this._root, 'overflow', 'hidden');
-        R.setStyle(this._root, 'opacity', '0');
-        R.setStyle(this._root, 'transition', 'opacity 1s');
-        R.appendChild(this._root, svg);
+        const root = R.createElement('div');
+        this._root = root;
+        R.setAttribute(root, 'id', 'ngxDmTourBackdrop');
+        R.setStyle(root, 'position', 'fixed');
+        R.setStyle(root, 'z-index', '9999');
+        R.setStyle(root, 'top', '0');
+        R.setStyle(root, 'right', '0');
+        R.setStyle(root, 'bottom', '0');
+        R.setStyle(root, 'left', '0');
+        R.setStyle(root, 'overflow', 'hidden');
+        R.setStyle(root, 'opacity', '0');
+        R.setStyle(root, 'transition', 'opacity 1s');
+        R.appendChild(root, svg);
         this.document.activeElement.blur();
         this._hlVisible = true;
-        R.appendChild(this.document.body, this._root);
+        R.appendChild(this.document.body, root);
         setTimeout(() => {
-            R.setStyle(this._root, 'opacity', 'var(--ngx-dm-tour-backdrop-opacity, .3)');
+            R.setStyle(root, 'opacity', 'var(--ngx-dm-tour-backdrop-opacity, .3)');
             this._onClickRemove = R.listen(this.document, 'click', e => this.hideControlsHelp(e));
             this._onKeyupRemove = R.listen(this.document, 'keyup', e => this.hideControlsHelp(e));
         });
@@ -186,22 +273,24 @@ export class DmTourService {
             R.removeChild(this.document.body, bd);
         }
 
-        this._root = R.createElement('div');
-        R.setStyle(this._root, 'position', 'fixed');
-        R.setStyle(this._root, 'z-index', '9999');
-        R.setStyle(this._root, 'top', '0');
-        R.setStyle(this._root, 'right', '0');
-        R.setStyle(this._root, 'bottom', '0');
-        R.setStyle(this._root, 'left', '0');
-        R.setStyle(this._root, 'overflow', 'hidden');
-        R.setStyle(this._root, 'opacity', '0');
-        R.setStyle(this._root, 'transition', 'opacity 1s');
+        const root = R.createElement('div');
+        this._root = root;
+        R.setAttribute(root, 'id', '#ngxDmTourBackdrop');
+        R.setStyle(root, 'position', 'fixed');
+        R.setStyle(root, 'z-index', '9999');
+        R.setStyle(root, 'top', '0');
+        R.setStyle(root, 'right', '0');
+        R.setStyle(root, 'bottom', '0');
+        R.setStyle(root, 'left', '0');
+        R.setStyle(root, 'overflow', 'hidden');
+        R.setStyle(root, 'opacity', '0');
+        R.setStyle(root, 'transition', 'opacity 1s');
 
         this.document.activeElement.blur();
         this._hlVisible = true;
-        R.appendChild(this.document.body, this._root);
+        R.appendChild(this.document.body, root);
         setTimeout(() => {
-            R.setStyle(this._root, 'opacity', 'var(--ngx-dm-tour-backdrop-opacity, .3)');
+            R.setStyle(root, 'opacity', 'var(--ngx-dm-tour-backdrop-opacity, .3)');
             this._onClickRemove = R.listen(this.document, 'click', e => this.hideControlsHelp(e));
             this._onKeyupRemove = R.listen(this.document, 'keyup', e => this.hideControlsHelp(e));
         });
@@ -242,6 +331,46 @@ export class DmTourService {
             return null;
         }
         return el.getBoundingClientRect();
+    }
+
+    private _showLoading() {
+        const R = this._r2;
+        const bd = this.document.querySelector('#ngxDmTourLoading');
+        if (bd) {
+            R.removeChild(this.document.body, bd);
+        }
+
+        const root = R.createElement('div');
+        R.setAttribute(root, 'id', 'ngxDmTourLoading');
+        R.setStyle(root, 'position', 'fixed');
+        R.setStyle(root, 'z-index', '9999');
+        R.setStyle(root, 'top', '0');
+        R.setStyle(root, 'right', '0');
+        R.setStyle(root, 'bottom', '0');
+        R.setStyle(root, 'left', '0');
+        R.setStyle(root, 'overflow', 'hidden');
+        R.setStyle(root, 'background-color', 'transparent');
+        R.setStyle(root, 'transition', 'background-color .5s');
+
+        // const tpl = R.createElement('template');
+        // tpl
+        root.innerHTML = this._cfg.loaderHtml;
+
+        this.document.activeElement.blur();
+        R.appendChild(this.document.body, root);
+        setTimeout(() => R.setStyle(root, 'background-color', 'var(--ngx-dm-tour-loading-bg-color, rgba(0,0,0,.3))'));
+    }
+
+    private _hideLoading() {
+        const R = this._r2;
+        const bd = this.document.querySelector('#ngxDmTourLoading');
+        if (bd) {
+            R.removeChild(this.document.body, bd);
+        }
+    }
+
+    private _handleLoadError(err: any) {
+        console.warn('[ngx-dm-tour] load error:', err);
     }
 
 }

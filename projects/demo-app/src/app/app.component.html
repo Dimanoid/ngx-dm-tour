@@ -8,11 +8,11 @@
                     <div class="layout vertical fit scroll">
                         <b class="mb1 fs-l">Options:</b>
                         <div>
-                            <button nz-button nzType="primary" (click)="showHelp('s1')" [dm-tour]="{ id: 's0.help', shape: 'square' }">
+                            <button nz-button nzType="primary" (click)="showHelp('s1')" dm-tour="s0.help">
                                 Show help
                             </button>
                             <br>
-                            <button class="mt05" nz-button nzType="primary" (click)="showControlsHelp('s1')" [dm-tour]="{ id: 's0.help2', shape: 'square' }">
+                            <button class="mt05" nz-button nzType="primary" (click)="showControlsHelp('s1')" dm-tour="s0.help2">
                                 Highlight controls
                             </button>
                         </div>
@@ -34,10 +34,10 @@
                     <div class="dm-panel-demo relative">
                         <div class="layout end-justified">
                             <div style="width: 700px"></div>
-                            <div class="dm-pointer-right" [dm-tour]="{ id: 's1.p1', shape: 'square' }">Scroll right to view more content</div>
+                            <div class="dm-pointer-right" dm-tour="s1.p1">Scroll right to view more content</div>
                             <div class="flex"></div>
                             <div>
-                                <div [dm-tour]="{ id: 's1.tb1', shape: 'square' }">
+                                <div dm-tour="s1.tb1">
                                     <nz-button-group>
                                         <button nz-button nzType="default">S</button>
                                         <button nz-button nzType="default">O</button>
@@ -67,7 +67,7 @@
                         <div class="dm-pointer-bottom" style="width: 200px; margin-left: 400px" dm-tour="s1.p2">Scroll down to view more content</div>
                         <br><br><br><br>
                         <pre style="width: 400px; margin: 500px">
-<span [dm-tour]="{ id: 's1.tobe', shape: 'square' }">To be or not to be</span>—that is the question:
+<span dm-tour="s1.tobe">To be or not to be</span>—that is the question:
 Whether ’tis nobler in the mind to suffer
 The slings and arrows of outrageous fortune,
 Or to take arms against a sea of troubles
