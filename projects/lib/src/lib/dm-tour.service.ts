@@ -1,6 +1,6 @@
 import { Injectable, ElementRef, Inject, Optional, RendererFactory2, Renderer2 } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 
 import { DmTourConfig, DmTourSection, DmTourControl } from './models';
 import { isElemVisible } from './utils';
