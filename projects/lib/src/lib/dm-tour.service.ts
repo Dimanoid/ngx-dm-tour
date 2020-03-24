@@ -22,16 +22,19 @@ export class DmTourService {
     constructor(
         private _rendererFactory: RendererFactory2,
         @Inject(DOCUMENT) private document,
-        @Inject('dmTourRootPath') @Optional() _cfg: DmTourConfig =  { rootPath: '/' }
+        @Inject('dmTourRootPath') @Optional() private _cfg: DmTourConfig
     ) {
+        if (!this._cfg) {
+            this._cfg =  new DmTourConfig();
+        }
         this._r2 = this._rendererFactory.createRenderer(null, null);
+        console.log('config:', this._cfg);
     }
 
     registerControl(sectionId: string, id: string, el: ElementRef, position?: string, shape?: string) {
         if (!sectionId || !id || !el) {
             return;
         }
-        console.log(sectionId, id);
         if (!this._controls[sectionId]) {
             this._controls[sectionId] = {};
         }

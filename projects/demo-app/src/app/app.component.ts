@@ -81,4 +81,8 @@ export class AppComponent implements OnInit {
         this._tour.showHelp(section);
     }
 
+    showControlsHelp(section: string) {
+        this.clicked = true;
+        this._tour.showControlsHelp(section);
+    }
 }

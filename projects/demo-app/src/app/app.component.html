@@ -7,9 +7,13 @@
                 <div class="layout flex relative">
                     <div class="layout vertical fit scroll">
                         <b class="mb1 fs-l">Options:</b>
-                        <div class="layout center">
+                        <div>
                             <button nz-button nzType="primary" (click)="showHelp('s1')" [dm-tour]="{ id: 's0.help', shape: 'square' }">
                                 Show help
+                            </button>
+                            <br>
+                            <button class="mt05" nz-button nzType="primary" (click)="showControlsHelp('s1')" [dm-tour]="{ id: 's0.help2', shape: 'square' }">
+                                Highlight controls
                             </button>
                         </div>
                     </div>
@@ -55,7 +59,7 @@
                         <div class="dm-poi layout center-center" style="width: 150px; height: 100px" dm-tour="s1.poi1">
                             <span>Some point of interest</span>
                         </div>
-                        <button nz-button nzType="primary" nzShape="round" nzGhost style="margin: 100px 0 0 200px" dm-tour="s1.btn1" (click)="showHelp('s0')">Some button</button>
+                        <button nz-button nzType="primary" nzShape="round" nzGhost style="margin: 100px 0 0 200px" dm-tour="s1.btn1" (click)="showControlsHelp('s0')">Some button</button>
                         <div class="dm-poi layout center-center" style="width: 250px; height: 150px; position: absolute; left: 900px; top: 500px" dm-tour="s1.poi2">
                             <span>Some other point of interest</span>
                         </div>
