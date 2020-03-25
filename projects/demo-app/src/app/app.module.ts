@@ -12,6 +12,7 @@ import en from '@angular/common/locales/en';
 registerLocaleData(en);
 
 import { DmTourModule } from '@dimanoid/ngx-dm-tour';
+
 import { AppComponent } from './app.component';
 
 @NgModule({

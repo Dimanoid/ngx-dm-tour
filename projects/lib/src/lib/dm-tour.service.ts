@@ -2,15 +2,17 @@ import { Injectable, ElementRef, Inject, Optional, RendererFactory2, Renderer2 }
 import { DOCUMENT } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 
-import { DmTourConfig, DmTourSection, DmTourControl } from './models';
+import { DmTourConfig, DmTourSection, DmTourControl, DM_TOUR_CONF } from './models';
 import { isElemVisible } from './utils';
 import { Observable } from 'rxjs';
+import { GLOBAL_STYLES } from './dm-tour.styles';
 
 @Injectable({
     providedIn: 'root'
 })
 export class DmTourService {
 
+    private _cfg: DmTourConfig;
     private _sections: { [id: string]: DmTourSection };
     private _controls: { [sectionId: string]: { [id: string]: DmTourControl } } = {};
 
@@ -25,14 +27,13 @@ export class DmTourService {
         private _rendererFactory: RendererFactory2,
         private _http: HttpClient,
         @Inject(DOCUMENT) private document,
-        @Inject('dmTourConfig') @Optional() private _cfg: DmTourConfig
+        @Inject(DM_TOUR_CONF) @Optional() cfg: DmTourConfig
     ) {
-        if (!this._cfg) {
-            this._cfg =  new DmTourConfig();
-        }
+        this._cfg =  new DmTourConfig(cfg);
         this._r2 = this._rendererFactory.createRenderer(null, null);
         console.log('config:', this._cfg);
         if (this._cfg.loadIndexOnStart) {
+            this._addGlobalStyles();
             this._loadSections().subscribe(
                 () => {},
                 err => this._handleLoadError(err)
@@ -65,6 +66,7 @@ export class DmTourService {
             return;
         }
         if (!this._sections) {
+            this._addGlobalStyles();
             this._loadSections().subscribe(
                 () => {
                     this._loadSectionControls(sectionId).subscribe(
@@ -191,7 +193,12 @@ export class DmTourService {
                 continue;
             }
             count++;
-            if (c.shape == 'square') {
+            const shape = c.shape
+                ? c.shape
+                : this._cfg.defaultShape == 'auto'
+                    ? (b.width > 200 || b.height > 200 ? 'square' : 'circle')
+                    : this._cfg.defaultShape;
+            if (shape == 'square') {
                 const hl = R.createElement('rect', 'svg');
                 R.setAttribute(hl, 'x', '' + MR(b.left - 10));
                 R.setAttribute(hl, 'y', '' + MR(b.top - 10));
@@ -237,15 +244,6 @@ export class DmTourService {
         const root = R.createElement('div');
         this._root = root;
         R.setAttribute(root, 'id', 'ngxDmTourBackdrop');
-        R.setStyle(root, 'position', 'fixed');
-        R.setStyle(root, 'z-index', '9999');
-        R.setStyle(root, 'top', '0');
-        R.setStyle(root, 'right', '0');
-        R.setStyle(root, 'bottom', '0');
-        R.setStyle(root, 'left', '0');
-        R.setStyle(root, 'overflow', 'hidden');
-        R.setStyle(root, 'opacity', '0');
-        R.setStyle(root, 'transition', 'opacity 1s');
         R.appendChild(root, svg);
         this.document.activeElement.blur();
         this._hlVisible = true;
@@ -275,16 +273,7 @@ export class DmTourService {
 
         const root = R.createElement('div');
         this._root = root;
-        R.setAttribute(root, 'id', '#ngxDmTourBackdrop');
-        R.setStyle(root, 'position', 'fixed');
-        R.setStyle(root, 'z-index', '9999');
-        R.setStyle(root, 'top', '0');
-        R.setStyle(root, 'right', '0');
-        R.setStyle(root, 'bottom', '0');
-        R.setStyle(root, 'left', '0');
-        R.setStyle(root, 'overflow', 'hidden');
-        R.setStyle(root, 'opacity', '0');
-        R.setStyle(root, 'transition', 'opacity 1s');
+        R.setAttribute(root, 'id', 'ngxDmTourBackdrop');
 
         this.document.activeElement.blur();
         this._hlVisible = true;
@@ -343,18 +332,6 @@ export class DmTourService {
 
         const root = R.createElement('div');
         R.setAttribute(root, 'id', 'ngxDmTourLoading');
-        R.setStyle(root, 'position', 'fixed');
-        R.setStyle(root, 'z-index', '9999');
-        R.setStyle(root, 'top', '0');
-        R.setStyle(root, 'right', '0');
-        R.setStyle(root, 'bottom', '0');
-        R.setStyle(root, 'left', '0');
-        R.setStyle(root, 'overflow', 'hidden');
-        R.setStyle(root, 'background-color', 'transparent');
-        R.setStyle(root, 'transition', 'background-color .5s');
-
-        // const tpl = R.createElement('template');
-        // tpl
         root.innerHTML = this._cfg.loaderHtml;
 
         this.document.activeElement.blur();
@@ -372,6 +349,20 @@ export class DmTourService {
 
     private _handleLoadError(err: any) {
         console.warn('[ngx-dm-tour] load error:', err);
+    }
+
+    private _addGlobalStyles() {
+        const R = this._r2;
+        const bd = this.document.head.querySelector('#ngxDmTourStyles');
+        if (bd) {
+            R.removeChild(this.document.head, bd);
+        }
+
+        const root = R.createElement('style');
+        R.setAttribute(root, 'id', 'ngxDmTourStyles');
+        root.innerHTML = GLOBAL_STYLES;
+
+        R.appendChild(this.document.head, root);
     }
 
 }
