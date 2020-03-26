@@ -152,7 +152,7 @@ export class DmTourService {
         }
         const MR = Math.round;
         const R = this._r2;
-        const bd = this.document.querySelector('#ngxDmTourBackdrop');
+        const bd = this.document.querySelector('#ngxDmTourRoot');
         if (bd) {
             R.removeChild(this.document.body, bd);
         }
@@ -181,7 +181,7 @@ export class DmTourService {
         R.setAttribute(mrect, 'fill', 'white');
         R.appendChild(mask, mrect);
 
-        let count = 0;
+        const tts: any[] = [];
         for (const id of ids) {
             const c = this._controls[sectionId][id];
             if (!c || !c.el) {
@@ -192,7 +192,6 @@ export class DmTourService {
             if (!isElemVisible(el) || !b || b.width == 0 || b.height == 0) {
                 continue;
             }
-            count++;
             const shape = c.shape
                 ? c.shape
                 : this._cfg.defaultShape == 'auto'
@@ -223,8 +222,18 @@ export class DmTourService {
                 R.setAttribute(hl, 'stroke-opacity', 'var(--ngx-dm-tour-hl-stroke-opacity, .3)');
                 R.appendChild(mask, hl);
             }
+            const tt = R.createElement('div');
+            R.addClass(tt, 'ngx-dm-tour-tooltip');
+            R.addClass(tt, 'ngx-dm-tour-tooltip-bottom');
+            R.setStyle(tt, 'top', MR(b.top - 10) + 'px');
+            R.setStyle(tt, 'left', MR(b.left + b.width / 2) + 'px');
+            const tti = R.createElement('div');
+            R.addClass(tti, 'ngx-dm-tour-tooltip-inner');
+            R.appendChild(tti, R.createText(c.text));
+            R.appendChild(tt, tti);
+            tts.push(tt);
         }
-        if (count == 0) {
+        if (tts.length == 0) {
             console.warn(`[ngx-dm-tour] There are no visible controls registered for the section "${sectionId}"`);
             return;
         }
@@ -241,13 +250,24 @@ export class DmTourService {
         R.appendChild(svg, rect);
         R.setAttribute(svg, 'width', '10000px');
         R.setAttribute(svg, 'height', '10000px');
+
+        this._root = R.createElement('div');
+        R.setAttribute(this._root, 'id', 'ngxDmTourRoot');
         const root = R.createElement('div');
-        this._root = root;
+        R.appendChild(this._root, root);
         R.setAttribute(root, 'id', 'ngxDmTourBackdrop');
+        if (this._cfg.customCssClass) {
+            R.addClass(root, this._cfg.customCssClass);
+        }
         R.appendChild(root, svg);
+
+        for (const tt of tts) {
+            R.appendChild(this._root, tt);
+        }
+
         this.document.activeElement.blur();
         this._hlVisible = true;
-        R.appendChild(this.document.body, root);
+        R.appendChild(this.document.body, this._root);
         setTimeout(() => {
             R.setStyle(root, 'opacity', 'var(--ngx-dm-tour-backdrop-opacity, .3)');
             this._onClickRemove = R.listen(this.document, 'click', e => this.hideControlsHelp(e));
@@ -266,18 +286,23 @@ export class DmTourService {
         }
         const MR = Math.round;
         const R = this._r2;
-        const bd = this.document.querySelector('ngxDmTourBackdrop');
-        if (bd) {
-            R.removeChild(this.document.body, bd);
+        const obd = this.document.querySelector('ngxDmTourRoot');
+        if (obd) {
+            R.removeChild(this.document.body, obd);
         }
 
+        this._root = R.createElement('div');
+        R.setAttribute(this._root, 'id', 'ngxDmTourRoot');
         const root = R.createElement('div');
-        this._root = root;
+        R.appendChild(this._root, root);
         R.setAttribute(root, 'id', 'ngxDmTourBackdrop');
+        if (this._cfg.customCssClass) {
+            R.addClass(root, this._cfg.customCssClass);
+        }
 
         this.document.activeElement.blur();
         this._hlVisible = true;
-        R.appendChild(this.document.body, root);
+        R.appendChild(this.document.body, this._root);
         setTimeout(() => {
             R.setStyle(root, 'opacity', 'var(--ngx-dm-tour-backdrop-opacity, .3)');
             this._onClickRemove = R.listen(this.document, 'click', e => this.hideControlsHelp(e));
@@ -325,13 +350,16 @@ export class DmTourService {
 
     private _showLoading() {
         const R = this._r2;
-        const bd = this.document.querySelector('#ngxDmTourLoading');
-        if (bd) {
-            R.removeChild(this.document.body, bd);
+        const obd = this.document.querySelector('#ngxDmTourLoading');
+        if (obd) {
+            R.removeChild(this.document.body, obd);
         }
 
         const root = R.createElement('div');
         R.setAttribute(root, 'id', 'ngxDmTourLoading');
+        if (this._cfg.customCssClass) {
+            R.addClass(root, this._cfg.customCssClass);
+        }
         root.innerHTML = this._cfg.loaderHtml;
 
         this.document.activeElement.blur();
@@ -341,9 +369,9 @@ export class DmTourService {
 
     private _hideLoading() {
         const R = this._r2;
-        const bd = this.document.querySelector('#ngxDmTourLoading');
-        if (bd) {
-            R.removeChild(this.document.body, bd);
+        const obd = this.document.querySelector('#ngxDmTourLoading');
+        if (obd) {
+            R.removeChild(this.document.body, obd);
         }
     }
 
@@ -353,13 +381,16 @@ export class DmTourService {
 
     private _addGlobalStyles() {
         const R = this._r2;
-        const bd = this.document.head.querySelector('#ngxDmTourStyles');
-        if (bd) {
-            R.removeChild(this.document.head, bd);
+        const obd = this.document.head.querySelector('#ngxDmTourStyles');
+        if (obd) {
+            R.removeChild(this.document.head, obd);
         }
 
         const root = R.createElement('style');
         R.setAttribute(root, 'id', 'ngxDmTourStyles');
+        if (this._cfg.customCssClass) {
+            R.addClass(root, this._cfg.customCssClass);
+        }
         root.innerHTML = GLOBAL_STYLES;
 
         R.appendChild(this.document.head, root);

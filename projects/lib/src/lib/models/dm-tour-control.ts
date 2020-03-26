@@ -3,5 +3,9 @@ export interface DmTourControl {
     text?: string;
     el?: Element | string;
     shape?: 'circle' | 'square';
-    pos?: string;
+    pos?: 'auto'
+        | 'top-left' | 'top' | 'top-right'
+        | 'bottom-left' | 'bottom' | 'bottom-right'
+        | 'left-top' | 'left' | 'left-bottom'
+        | 'right-top' | 'right' | 'right-bottom';
 }
