@@ -1,4 +1,6 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { PlatformLocation } from '@angular/common';
+
 import { Point } from './dm-divider.module';
 import { DmTourService } from '@dimanoid/ngx-dm-tour';
 
@@ -24,8 +26,9 @@ export class AppComponent implements OnInit {
         }
     } = {};
 
-    constructor(private _tour: DmTourService) {
+    constructor(private _tour: DmTourService, private _pl: PlatformLocation) {
         this.divider['d1'] = { min: 200, max: 700, vertical: true, size: 300 };
+        console.log('pl:', this._pl);
     }
 
     ngOnInit() {

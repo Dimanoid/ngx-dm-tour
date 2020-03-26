@@ -11,7 +11,7 @@ export interface IDmTourConfig {
 }
 
 export class DmTourConfig implements IDmTourConfig {
-    rootPath = '/assets/help';
+    rootPath = 'assets/help';
     loadIndexOnStart = true;
     loaderHtml = `
         <span style="color: steelblue;
