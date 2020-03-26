@@ -150,6 +150,7 @@ export class DmTourService {
             console.warn(`[ngx-dm-tour] There are no visible controls registered for the section "${sectionId}"`);
             return;
         }
+        const dr = this.document.body.getBoundingClientRect();
         const MR = Math.round;
         const R = this._r2;
         const bd = this.document.querySelector('#ngxDmTourRoot');
@@ -222,15 +223,92 @@ export class DmTourService {
                 R.setAttribute(hl, 'stroke-opacity', 'var(--ngx-dm-tour-hl-stroke-opacity, .3)');
                 R.appendChild(mask, hl);
             }
+
             const tt = R.createElement('div');
-            R.addClass(tt, 'ngx-dm-tour-tooltip');
-            R.addClass(tt, 'ngx-dm-tour-tooltip-bottom');
-            R.setStyle(tt, 'top', MR(b.top - 10) + 'px');
-            R.setStyle(tt, 'left', MR(b.left + b.width / 2) + 'px');
+            R.addClass(tt, 'ngx-dm-tour-text');
             const tti = R.createElement('div');
-            R.addClass(tti, 'ngx-dm-tour-tooltip-inner');
+            R.addClass(tti, 'ngx-dm-tour-text-inner');
             R.appendChild(tti, R.createText(c.text));
             R.appendChild(tt, tti);
+            let pos = c.pos && c.pos != 'auto' ? c.pos.split('-') : null;
+            if (!pos) {
+                if (b.top > 250) {
+                    pos = ['top', 'center'];
+                }
+                else if (dr.width - b.right > 250) {
+                    pos = ['right', 'center'];
+                }
+                else if (dr.height - b.bottom > 250) {
+                    pos = ['bottom', 'center'];
+                }
+                else if (b.left > 250) {
+                    pos = ['left', 'center'];
+                }
+                else {
+                    pos = ['center', 'center'];
+                }
+            }
+            else if (pos.length == 1) {
+                pos.push('center');
+            }
+            let x = MR(b.left + b.width / 2);
+            let y = MR(b.top + b.height / 2);
+            let tx = -50;
+            let ty = -50;
+            if (pos[0] == 'top') {
+                ty = -100;
+                y = b.top - 20;
+                if (pos[1] == 'left') {
+                    tx = 0;
+                    x = b.left;
+                }
+                else if (pos[1] == 'right') {
+                    tx = -100;
+                    x = b.right;
+                }
+            }
+            else if (pos[0] == 'bottom') {
+                ty = 0;
+                y = b.bottom + 20;
+                if (pos[1] == 'left') {
+                    tx = 0;
+                    x = b.left;
+                }
+                else if (pos[1] == 'right') {
+                    tx = -100;
+                    x = b.right;
+                }
+            }
+            else if (pos[0] == 'left') {
+                tx = -100;
+                x = b.left - 20;
+                if (pos[1] == 'top') {
+                    ty = 0;
+                    y = b.top;
+                }
+                else if (pos[1] == 'bottom') {
+                    ty = -100;
+                    y = b.bottom;
+                }
+            }
+            else if (pos[0] == 'right') {
+                tx = 0;
+                x = b.right + 20;
+                if (pos[1] == 'top') {
+                    ty = 0;
+                    y = b.top;
+                }
+                else if (pos[1] == 'bottom') {
+                    ty = -100;
+                    y = b.bottom;
+                }
+            }
+            console.log(`[${c.id}] pos:`, pos, '\n\tb:', b, `-> ${x}x${y}`, '\n\tc:', c);
+            R.setStyle(tt, 'top', `${y}px`);
+            R.setStyle(tt, 'left', `${x}px`);
+            R.setStyle(tt, 'transform', `translate(${tx}%, ${ty}%)`);
+            R.addClass(tt, `ngx-dm-tour-text-${pos[0]}-${pos[1]}`);
+
             tts.push(tt);
         }
         if (tts.length == 0) {

@@ -17,52 +17,111 @@ export const GLOBAL_STYLES = `
         opacity: 0;
         transition: opacity 1s;
     }
-    .ngx-dm-tour-tooltip {
+    .ngx-dm-tour-text {
         position: absolute;
-        border: 2px solid rgba(0, 0, 150, .2);
+        border: 2px solid white;
         border-radius: 8px;
-        background: white;
+        background: #0099e4;
         text-align: center;
         min-width: 70px;
         max-width: 400px;
+        max-height: 200px;
+        box-shadow: 0 0 4px rgba(0, 0, 0, .25);
     }
-    .ngx-dm-tour-tooltip > .ngx-dm-tour-tooltip-inner {
-        color: #008;
+    .ngx-dm-tour-text > .ngx-dm-tour-text-inner {
+        color: white;
         padding: 8px;
     }
-    .ngx-dm-tour-tooltip:after {
+    .ngx-dm-tour-text:after {
         border: 2px solid;
-        border-color: transparent rgba(0, 0, 150, .2) rgba(0, 0, 150, .2) transparent;
-        background: white;
+        border-color: transparent white white transparent;
+        box-shadow: 2px 2px 2px rgba(0, 0, 0, .25);
+        background: #0099e4;
         content: " ";
         position: absolute;
     }
-    .ngx-dm-tour-tooltip.ngx-dm-tour-tooltip-right:after {
-        right: -9px;
-        top: calc(50% - 8px);
+    .ngx-dm-tour-text.ngx-dm-tour-text-top-left:after {
+        bottom: -8px;
+        left: 8px;
         width: 16px;
         height: 16px;
-        transform: rotate(-45deg);
+        transform: rotate(45deg);
     }
-    .ngx-dm-tour-tooltip.ngx-dm-tour-tooltip-bottom:after {
-        bottom: -9px;
+    .ngx-dm-tour-text.ngx-dm-tour-text-top-center:after {
+        bottom: -8px;
         left: calc(50% - 8px);
         width: 16px;
         height: 16px;
         transform: rotate(45deg);
     }
-    .ngx-dm-tour-tooltip.ngx-dm-tour-tooltip-left:after {
-        left: -9px;
-        top: calc(50% - 8px);
+    .ngx-dm-tour-text.ngx-dm-tour-text-top-right:after {
+        bottom: -8px;
+        right: 8px;
+        width: 16px;
+        height: 16px;
+        transform: rotate(45deg);
+    }
+    .ngx-dm-tour-text.ngx-dm-tour-text-bottom-left:after {
+        top: -8px;
+        left: 8px;
         width: 16px;
         height: 16px;
         transform: rotate(-135deg);
     }
-    .ngx-dm-tour-tooltip.ngx-dm-tour-tooltip-top:after {
-        top: -9px;
+    .ngx-dm-tour-text.ngx-dm-tour-text-bottom-center:after {
+        top: -8px;
         left: calc(50% - 8px);
         width: 16px;
         height: 16px;
+        transform: rotate(-135deg);
+    }
+    .ngx-dm-tour-text.ngx-dm-tour-text-bottom-right:after {
+        top: -8px;
+        right: 8px;
+        width: 16px;
+        height: 16px;
+        transform: rotate(-135deg);
+    }
+    .ngx-dm-tour-text.ngx-dm-tour-text-right-top:after {
+        top: 8px;
+        left: -8px;
+        width: 16px;
+        height: 16px;
         transform: rotate(135deg);
+    }
+    .ngx-dm-tour-text.ngx-dm-tour-text-right-center:after {
+        top: calc(50% - 8px);
+        left: -8px;
+        width: 16px;
+        height: 16px;
+        transform: rotate(135deg);
+    }
+    .ngx-dm-tour-text.ngx-dm-tour-text-right-bottom:after {
+        bottom: 8px;
+        left: -8px;
+        width: 16px;
+        height: 16px;
+        transform: rotate(135deg);
+    }
+    .ngx-dm-tour-text.ngx-dm-tour-text-left-top:after {
+        top: 8px;
+        right: -8px;
+        width: 16px;
+        height: 16px;
+        transform: rotate(-45deg);
+    }
+    .ngx-dm-tour-text.ngx-dm-tour-text-left-center:after {
+        top: calc(50% - 8px);
+        right: -8px;
+        width: 16px;
+        height: 16px;
+        transform: rotate(-45deg);
+    }
+    .ngx-dm-tour-text.ngx-dm-tour-text-left-bottom:after {
+        bottom: 8px;
+        right: -8px;
+        width: 16px;
+        height: 16px;
+        transform: rotate(-45deg);
     }
 `;

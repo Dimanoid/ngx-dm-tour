@@ -2,38 +2,42 @@
     "controls": [
         {
             "id": "p1",
-            "text": "Some description for the control - bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla",
+            "text": "p1 / Some description for the control - bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla",
             "shape": "square"
         },
         {
             "id": "p2",
-            "text": "Some description for the control - bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla"
+            "text": "p2 / Some description for the control - bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla",
+            "pos": "bottom-left"
         },
         {
             "id": "tb1",
-            "text": "Some description for the control - bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla",
-            "shape": "square"
+            "text": "tb1 / Some description for the control - bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla",
+            "shape": "square",
+            "pos": "left-top"
         },
         {
             "id": "be",
-            "text": "Some description for the control - bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla"
+            "text": "be / Some description for the control - bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla"
         },
         {
             "id": "tobe",
-            "text": "Some description for the control - bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla",
+            "text": "tobe / Some description for the control - bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla",
             "shape": "square"
         },
         {
             "id": "poi1",
-            "text": "Some description for the control - bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla"
+            "text": "poi1 / Some description for the control - bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla"
         },
         {
             "id": "poi2",
-            "text": "Some description for the control - bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla"
+            "text": "poi2 / Some description for the control - bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla",
+            "pos": "bottom"
         },
         {
             "id": "btn1",
-            "text": "Some description for the control - bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla"
+            "text": "btn1 / Some description for the control - bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla",
+            "pos": "bottom-right"
         }
     ]
 }
