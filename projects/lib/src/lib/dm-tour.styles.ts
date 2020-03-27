@@ -76,7 +76,8 @@ export const GLOBAL_STYLES = `
         margin-top: 2px;
     }
     .ngx-dm-tour-button {
-        height: 24px;
+        transition: all .15s;
+        height: 26px;
         line-height: 1.5;
         position: relative;
         display: inline-block;
@@ -84,7 +85,7 @@ export const GLOBAL_STYLES = `
         text-align: center;
         border: 1px solid #d9d9d9;
         cursor: pointer;
-        padding: 0 15px;
+        padding: 0 8px;
         font-size: 14px;
         color: white;
         background-color: #0099e4;
@@ -92,7 +93,8 @@ export const GLOBAL_STYLES = `
         box-shadow: 0 2px 0 rgba(0,0,0,.045);
     }
     .ngx-dm-tour-button:hover {
-        box-shadow: 0 0 5px rgba(0,153,228,.5);
+        box-shadow: 0 2px 5px rgba(0,153,228,.5);
+        top: 0 !important;
     }
     #ngxDmTourDialogBtnIndex:before {
         content: "Content Index"
@@ -100,7 +102,7 @@ export const GLOBAL_STYLES = `
     #ngxDmTourDialogBtnControls{
         margin-left: 8px;
         position: absolute;
-        top: 0;
+        top: -2px;
         right: 30px;
         border-bottom-left-radius: 12px;
         border-bottom-right-radius: 12px;
@@ -113,8 +115,8 @@ export const GLOBAL_STYLES = `
     #ngxDmTourDialogBtnClose {
         position: absolute;
         right: 0;
-        top: 0;
-        padding: 0 4px 6px 5px;
+        top: -2px;
+        padding: 0 4px;
         border-radius: 0;
         border-bottom-left-radius: 50%;
         border-top: none;
