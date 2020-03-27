@@ -91,6 +91,36 @@ export class DmTourService {
         }
     }
 
+    showHelp(sectionId: string) {
+        if (this._hlVisible) {
+            return;
+        }
+        if (!this._sections) {
+            this._addGlobalStyles();
+            this._loadSections().subscribe(
+                () => {
+                    this._loadSectionHtml(sectionId).subscribe(
+                        () => this._showHelp(sectionId),
+                        err => this._handleLoadError(err)
+                    );
+                },
+                err => this._handleLoadError(err)
+            );
+        }
+        else if (!this._sections[sectionId]) {
+            this._handleLoadError(`There is no a section "${sectionId}" defined.`);
+        }
+        else if (this._sections[sectionId] && !this._sections[sectionId].controlsLoaded) {
+            this._loadSectionHtml(sectionId).subscribe(
+                () => this._showHelp(sectionId),
+                err => this._handleLoadError(err)
+            );
+        }
+        else {
+            this._showHelp(sectionId);
+        }
+    }
+
     private _loadSections(): Observable<void> {
         this._showLoading();
         return new Observable(obs => {
@@ -135,6 +165,24 @@ export class DmTourService {
                     else {
                         obs.error('${this._cfg.rootPath}/${sectionId}/index.json');
                     }
+                },
+                err => {
+                    this._hideLoading();
+                    obs.error(err);
+                }
+            );
+        });
+    }
+
+    private _loadSectionHtml(sectionId: string): Observable<void> {
+        this._showLoading();
+        return new Observable(obs => {
+            this._http.get(`${this._cfg.rootPath}/${sectionId}/index.html`, { responseType: 'text' }).subscribe(
+                res => {
+                    console.log('section html:', res);
+                    this._hideLoading();
+                    this._sections[sectionId].html = res;
+                    obs.next();
                 },
                 err => {
                     this._hideLoading();
@@ -331,12 +379,12 @@ export class DmTourService {
 
         this._root = R.createElement('div');
         R.setAttribute(this._root, 'id', 'ngxDmTourRoot');
+        if (this._cfg.customCssClass) {
+            R.addClass(this._root, this._cfg.customCssClass);
+        }
         const root = R.createElement('div');
         R.appendChild(this._root, root);
         R.setAttribute(root, 'id', 'ngxDmTourBackdrop');
-        if (this._cfg.customCssClass) {
-            R.addClass(root, this._cfg.customCssClass);
-        }
         R.appendChild(root, svg);
 
         for (const tt of tts) {
@@ -347,21 +395,15 @@ export class DmTourService {
         this._hlVisible = true;
         R.appendChild(this.document.body, this._root);
         setTimeout(() => {
-            R.setStyle(root, 'opacity', 'var(--ngx-dm-tour-backdrop-opacity, .3)');
+            R.addClass(this._root, 'ngx-dm-tour-show');
             this._onClickRemove = R.listen(this.document, 'click', e => this.hideControlsHelp(e));
             this._onKeyupRemove = R.listen(this.document, 'keyup', e => this.hideControlsHelp(e));
         });
     }
 
-    showHelp(sectionId: string) {
-        if (this._hlVisible) {
-            return;
-        }
+    private _showHelp(sectionId: string) {
+        const sec = this._sections[sectionId];
         const ids: string[] = this._controls[sectionId] ? Object.keys(this._controls[sectionId]) : [];
-        if (!ids || ids.length == 0) {
-            console.warn(`[ngx-dm-tour] There are no visible controls registered for the section "${sectionId}"`);
-            return;
-        }
         const MR = Math.round;
         const R = this._r2;
         const obd = this.document.querySelector('ngxDmTourRoot');
@@ -371,18 +413,62 @@ export class DmTourService {
 
         this._root = R.createElement('div');
         R.setAttribute(this._root, 'id', 'ngxDmTourRoot');
+        if (this._cfg.customCssClass) {
+            R.addClass(this._root, this._cfg.customCssClass);
+        }
         const root = R.createElement('div');
         R.appendChild(this._root, root);
         R.setAttribute(root, 'id', 'ngxDmTourBackdrop');
-        if (this._cfg.customCssClass) {
-            R.addClass(root, this._cfg.customCssClass);
-        }
+        R.addClass(root, 'ngx-dm-tour-dialog');
+
+        const dc = R.createElement('div');
+        R.appendChild(this._root, dc);
+        R.setAttribute(dc, 'id', 'ngxDmTourDialogContainer');
+        const d = R.createElement('div');
+        R.appendChild(dc, d);
+        R.setAttribute(d, 'id', 'ngxDmTourDialog');
+        R.addClass(d, `ngx-dm-tour-section-${sec.id}`);
+
+        const btnClose = R.createElement('button');
+        R.appendChild(d, btnClose);
+        R.setAttribute(btnClose, 'id', 'ngxDmTourDialogBtnClose');
+        R.addClass(btnClose, 'ngx-dm-tour-button');
+        const btnControls = R.createElement('button');
+        R.appendChild(d, btnControls);
+        R.setAttribute(btnControls, 'id', 'ngxDmTourDialogBtnControls');
+        R.addClass(btnControls, 'ngx-dm-tour-button');
+        R.listen(btnControls, 'click', e => this.hideHelp(e, () => this.showControlsHelp(sectionId)));
+
+        const dt = R.createElement('div');
+        R.appendChild(d, dt);
+        R.setAttribute(dt, 'id', 'ngxDmTourDialogTitle');
+        R.appendChild(dt, R.createText(`Section "${sec.title}"`));
+
+        const dd = R.createElement('div');
+        R.appendChild(d, dd);
+        R.setAttribute(dd, 'id', 'ngxDmTourDialogDesc');
+        const ddi = R.createElement('div');
+        R.appendChild(dd, ddi);
+        R.setAttribute(ddi, 'id', 'ngxDmTourDialogDescInner');
+        ddi.innerHTML = sec.html;
+
+        // const df = R.createElement('div');
+        // R.appendChild(d, df);
+        // R.setAttribute(df, 'id', 'ngxDmTourDialogFooter');
+        // const btnIndex = R.createElement('button');
+        // R.appendChild(df, btnIndex);
+        // R.setAttribute(btnIndex, 'id', 'ngxDmTourDialogBtnIndex');
+        // R.addClass(btnIndex, 'ngx-dm-tour-button');
+        // R.listen(btnIndex, 'click', e => {
+        //     e.stopImmediatePropagation();
+        // });
 
         this.document.activeElement.blur();
         this._hlVisible = true;
         R.appendChild(this.document.body, this._root);
+        console.log('_root', this._root);
         setTimeout(() => {
-            R.setStyle(root, 'opacity', 'var(--ngx-dm-tour-backdrop-opacity, .3)');
+            R.addClass(this._root, 'ngx-dm-tour-show');
             this._onClickRemove = R.listen(this.document, 'click', e => this.hideControlsHelp(e));
             this._onKeyupRemove = R.listen(this.document, 'keyup', e => this.hideControlsHelp(e));
         });
@@ -392,7 +478,7 @@ export class DmTourService {
         this.hideHelp(e);
     }
 
-    hideHelp(e?: Event) {
+    hideHelp(e?: Event, cb?: () => void) {
         if (e) {
             e.stopImmediatePropagation();
             e.preventDefault();
@@ -406,16 +492,22 @@ export class DmTourService {
             this._onKeyupRemove = null;
         }
         if (this._root && this._r2) {
-            this._r2.setStyle(this._root, 'transition', 'opacity .5s');
-            this._r2.setStyle(this._root, 'opacity', '0');
+            // this._r2.setStyle(this._root, 'transition', 'opacity .5s');
+            // this._r2.setStyle(this._root, 'opacity', '0');
+            this._r2.removeClass(this._root, 'ngx-dm-tour-show');
             setTimeout(() => {
-                this._r2.setStyle(this._root, 'transition', 'opacity 1s');
                 this._r2.removeChild(this.document.body, this._root);
                 this._hlVisible = false;
+                if (cb) {
+                    cb();
+                }
             }, 500);
         }
         else {
             this._hlVisible = false;
+            if (cb) {
+                cb();
+            }
         }
     }
 
@@ -466,9 +558,6 @@ export class DmTourService {
 
         const root = R.createElement('style');
         R.setAttribute(root, 'id', 'ngxDmTourStyles');
-        if (this._cfg.customCssClass) {
-            R.addClass(root, this._cfg.customCssClass);
-        }
         root.innerHTML = GLOBAL_STYLES;
 
         R.appendChild(this.document.head, root);
