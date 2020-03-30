@@ -148,6 +148,9 @@ export class DmTourService {
     }
 
     private _loadSectionControls(sectionId: string): Observable<void> {
+        if (!this._controls[sectionId]) {
+            return;
+        }
         this._showLoading();
         return new Observable(obs => {
             this._http.get<{ controls: DmTourControl[] }>(`${this._cfg.rootPath}/${sectionId}/index.json`).subscribe(
