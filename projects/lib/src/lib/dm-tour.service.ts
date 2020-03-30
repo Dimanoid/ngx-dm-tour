@@ -130,7 +130,6 @@ export class DmTourService {
                         this._sections = {};
                         for (const section of res.sections) {
                             this._sections[section.id] = section;
-                            this._controls[section.id] = {};
                         }
                         obs.next();
                     }
