@@ -31,7 +31,6 @@ export class DmTourService {
     ) {
         this._cfg =  new DmTourConfig(cfg);
         this._r2 = this._rendererFactory.createRenderer(null, null);
-        console.log('config:', this._cfg);
         if (this._cfg.loadIndexOnStart) {
             this._addGlobalStyles();
             this._loadSections().subscribe(
@@ -126,12 +125,12 @@ export class DmTourService {
         return new Observable(obs => {
             this._http.get<{ sections: DmTourSection[] }>(this._cfg.rootPath + '/index.json').subscribe(
                 res => {
-                    console.log('sections:', res);
                     this._hideLoading();
                     if (res && res.sections) {
                         this._sections = {};
                         for (const section of res.sections) {
                             this._sections[section.id] = section;
+                            this._controls[section.id] = {};
                         }
                         obs.next();
                     }
@@ -148,14 +147,13 @@ export class DmTourService {
     }
 
     private _loadSectionControls(sectionId: string): Observable<void> {
-        if (!this._controls[sectionId]) {
-            return;
-        }
         this._showLoading();
+        if (!this._controls[sectionId]) {
+            this._controls[sectionId] = {};
+        }
         return new Observable(obs => {
             this._http.get<{ controls: DmTourControl[] }>(`${this._cfg.rootPath}/${sectionId}/index.json`).subscribe(
                 res => {
-                    console.log('controls:', res);
                     this._hideLoading();
                     if (res && res.controls) {
                         for (const ctrl of res.controls) {
@@ -182,7 +180,7 @@ export class DmTourService {
         return new Observable(obs => {
             this._http.get(`${this._cfg.rootPath}/${sectionId}/index.html`, { responseType: 'text' }).subscribe(
                 res => {
-                    console.log('section html:', res);
+                    // console.log('section html:', res);
                     this._hideLoading();
                     this._sections[sectionId].html = res;
                     obs.next();
@@ -354,7 +352,7 @@ export class DmTourService {
                     y = b.bottom;
                 }
             }
-            console.log(`[${c.id}] pos:`, pos, '\n\tb:', b, `-> ${x}x${y}`, '\n\tc:', c);
+            // console.log(`[${c.id}] pos:`, pos, '\n\tb:', b, `-> ${x}x${y}`, '\n\tc:', c);
             R.setStyle(tt, 'top', `${y}px`);
             R.setStyle(tt, 'left', `${x}px`);
             R.setStyle(tt, 'transform', `translate(${tx}%, ${ty}%)`);
@@ -469,7 +467,7 @@ export class DmTourService {
         this.document.activeElement.blur();
         this._hlVisible = true;
         R.appendChild(this.document.body, this._root);
-        console.log('_root', this._root);
+        // console.log('_root', this._root);
         setTimeout(() => {
             R.addClass(this._root, 'ngx-dm-tour-show');
             this._onClickRemove = R.listen(this.document, 'click', e => this.hideControlsHelp(e));
