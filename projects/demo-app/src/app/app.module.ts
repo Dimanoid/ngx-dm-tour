@@ -11,6 +11,8 @@ import { registerLocaleData } from '@angular/common';
 import en from '@angular/common/locales/en';
 registerLocaleData(en);
 
+import { DmTableModule } from '@dimanoid/ngx-dm-table';
+
 import { DmTourModule } from '@dimanoid/ngx-dm-tour';
 
 import { AppComponent } from './app.component';
@@ -23,6 +25,7 @@ import { AppComponent } from './app.component';
         BrowserModule, BrowserAnimationsModule, CommonModule,
         FormsModule, ReactiveFormsModule,
         NzButtonModule,
+        DmTableModule,
         DmDividerModule, DmTourModule
     ],
     providers: [

@@ -66,7 +66,8 @@
                         <br><br><br><br>
                         <div class="dm-pointer-bottom" style="width: 200px; margin-left: 400px" dm-tour="s1.p2">Scroll down to view more content</div>
                         <br><br><br><br>
-                        <pre style="width: 400px; margin: 500px">
+                        <div class="layout" style="margin: 500px 0 0 500px">
+                            <pre style="width: 400px">
 <span dm-tour="s1.tobe">To be or not to be</span>—that is the question:
 Whether ’tis nobler in the mind to suffer
 The slings and arrows of outrageous fortune,
@@ -102,7 +103,37 @@ With this regard their currents turn awry
 And lose the name of action.—Soft you now,
 The fair Ophelia.—Nymph, in thy orisons
 <span dm-tour="s1.be">Be</span> all my sins remembered.
-                        </pre>
+                            </pre>
+                            <dm-table class="ngx-dmt-stripes" style="width: 500px" dm-tour="s1.table"
+                                [data]="[
+                                    [1, 'one', { key: 'value1' }],
+                                    [2, 'two', { key: 'value2' }],
+                                    [3, 'three', { key: 'value3' }]
+                                ]"
+                                [sort]="{ colId: 1, order: 1 }"
+                                [colsWidth]="{ '0': 100 }"
+                                [defaultColumnConfig]="{ minWidth: 200 }">
+                                <dm-column title="ID"
+                                    minWidth="50" maxWidth="150"
+                                    sortable="true" sort="number">
+                                </dm-column>
+                                <dm-column title="Text" sortable="true" sort="string"></dm-column>
+                                <dm-column>
+                                    <ng-template #header>
+                                        <div>
+                                            <i style="color: red">
+                                                <u>Key value</u>
+                                            </i>
+                                        </div>
+                                    </ng-template>
+                                    <ng-template #cell let-item>
+                                        <div>
+                                            key: <b>{{ item['key'] }}</b>
+                                        </div>
+                                    </ng-template>
+                                </dm-column>
+                            </dm-table>
+                        </div>
                     </div>
 
                 </div>

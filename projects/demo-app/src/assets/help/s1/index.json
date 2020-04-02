@@ -38,6 +38,27 @@
             "id": "btn1",
             "text": "btn1 / Some description for the control - bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla",
             "pos": "bottom-right"
+        },
+        {
+            "id": "table",
+            "children": [
+                {
+                    "el": "th.ngx-dmt-sorted > div.ngx-dmt-column-sort-container",
+                    "text": "children -> th.ngx-dmt-sorted > div.ngx-dmt-column-sort-container selector"
+                },
+                {
+                    "el": "div.ngx-dmt-column-title",
+                    "text": "children -> div.ngx-dmt-column-title selector",
+                    "shape": "square",
+                    "pos": "bottom-right"
+                },
+                {
+                    "el": "tr:nth-child(2) > td:nth-child(3) > div > b",
+                    "text": "children -> tr:nth-child(2) > td:nth-child(3) > div > b selector",
+                    "shape": "square",
+                    "pos": "bottom-left"
+                }
+            ]
         }
     ]
 }

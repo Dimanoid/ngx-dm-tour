@@ -1,5 +1,6 @@
 export interface DmTourControl {
     id: string;
+    children?: DmTourControl[];
     text?: string;
     el?: Element | string;
     shape?: 'circle' | 'square';

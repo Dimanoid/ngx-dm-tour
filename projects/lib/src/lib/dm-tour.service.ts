@@ -198,8 +198,6 @@ export class DmTourService {
             console.warn(`[ngx-dm-tour] There are no visible controls registered for the section "${sectionId}"`);
             return;
         }
-        const dr = this.document.body.getBoundingClientRect();
-        const MR = Math.round;
         const R = this._r2;
         const bd = this.document.querySelector('#ngxDmTourRoot');
         if (bd) {
@@ -233,131 +231,24 @@ export class DmTourService {
         const tts: any[] = [];
         for (const id of ids) {
             const c = this._controls[sectionId][id];
-            if (!c || !c.el) {
-                continue;
-            }
-            const el = typeof c.el === 'string' ? this.document.querySelector(c.el) : c.el;
-            const b = this._getBoundaries(el);
-            if (!isElemVisible(el) || !b || b.width == 0 || b.height == 0) {
-                continue;
-            }
-            const shape = c.shape
-                ? c.shape
-                : this._cfg.defaultShape == 'auto'
-                    ? (b.width > 200 || b.height > 200 ? 'square' : 'circle')
-                    : this._cfg.defaultShape;
-            if (shape == 'square') {
-                const hl = R.createElement('rect', 'svg');
-                R.setAttribute(hl, 'x', '' + MR(b.left - 10));
-                R.setAttribute(hl, 'y', '' + MR(b.top - 10));
-                R.setAttribute(hl, 'width', '' + MR(b.width + 20));
-                R.setAttribute(hl, 'height', '' + MR(b.height + 20));
-                R.setAttribute(hl, 'rx', '8');
-                R.setAttribute(hl, 'fill', 'black');
-                R.setAttribute(hl, 'stroke', 'black');
-                R.setAttribute(hl, 'stroke-width', 'var(--ngx-dm-tour-hl-stroke-width, 15)');
-                R.setAttribute(hl, 'stroke-opacity', 'var(--ngx-dm-tour-hl-stroke-opacity, .3)');
-                R.appendChild(mask, hl);
-            }
-            else {
-                const hl = R.createElement('circle', 'svg');
-                const r = b.width > b.height ? b.width / 2 : b.height / 2;
-                R.setAttribute(hl, 'cx', '' + MR(b.left + b.width / 2));
-                R.setAttribute(hl, 'cy', '' + MR(b.top + b.height / 2));
-                R.setAttribute(hl, 'r', '' + MR(r + 25));
-                R.setAttribute(hl, 'fill', 'black');
-                R.setAttribute(hl, 'stroke', 'black');
-                R.setAttribute(hl, 'stroke-width', 'var(--ngx-dm-tour-hl-stroke-width, 15)');
-                R.setAttribute(hl, 'stroke-opacity', 'var(--ngx-dm-tour-hl-stroke-opacity, .3)');
-                R.appendChild(mask, hl);
-            }
-
-            const tt = R.createElement('div');
-            R.addClass(tt, 'ngx-dm-tour-text');
-            const tti = R.createElement('div');
-            R.addClass(tti, 'ngx-dm-tour-text-inner');
-            R.appendChild(tti, R.createText(c.text));
-            R.appendChild(tt, tti);
-            let pos = c.pos && c.pos != 'auto' ? c.pos.split('-') : null;
-            if (!pos) {
-                if (b.top > 250) {
-                    pos = ['top', 'center'];
+            if (c && c.el) {
+                if (!c.children && c.text) {
+                    const tt = this._addControlHl(c, mask);
+                    if (tt) {
+                        tts.push(tt);
+                    }
                 }
-                else if (dr.width - b.right > 250) {
-                    pos = ['right', 'center'];
-                }
-                else if (dr.height - b.bottom > 250) {
-                    pos = ['bottom', 'center'];
-                }
-                else if (b.left > 250) {
-                    pos = ['left', 'center'];
-                }
-                else {
-                    pos = ['center', 'center'];
+                else if (c.children) {
+                    for (const ch of c.children) {
+                        if (ch.text) {
+                            const tt = this._addControlHl(ch, mask);
+                            if (tt) {
+                                tts.push(tt);
+                            }
+                        }
+                    }
                 }
             }
-            else if (pos.length == 1) {
-                pos.push('center');
-            }
-            let x = MR(b.left + b.width / 2);
-            let y = MR(b.top + b.height / 2);
-            let tx = -50;
-            let ty = -50;
-            if (pos[0] == 'top') {
-                ty = -100;
-                y = b.top - 20;
-                if (pos[1] == 'left') {
-                    tx = 0;
-                    x = b.left;
-                }
-                else if (pos[1] == 'right') {
-                    tx = -100;
-                    x = b.right;
-                }
-            }
-            else if (pos[0] == 'bottom') {
-                ty = 0;
-                y = b.bottom + 20;
-                if (pos[1] == 'left') {
-                    tx = 0;
-                    x = b.left;
-                }
-                else if (pos[1] == 'right') {
-                    tx = -100;
-                    x = b.right;
-                }
-            }
-            else if (pos[0] == 'left') {
-                tx = -100;
-                x = b.left - 20;
-                if (pos[1] == 'top') {
-                    ty = 0;
-                    y = b.top;
-                }
-                else if (pos[1] == 'bottom') {
-                    ty = -100;
-                    y = b.bottom;
-                }
-            }
-            else if (pos[0] == 'right') {
-                tx = 0;
-                x = b.right + 20;
-                if (pos[1] == 'top') {
-                    ty = 0;
-                    y = b.top;
-                }
-                else if (pos[1] == 'bottom') {
-                    ty = -100;
-                    y = b.bottom;
-                }
-            }
-            // console.log(`[${c.id}] pos:`, pos, '\n\tb:', b, `-> ${x}x${y}`, '\n\tc:', c);
-            R.setStyle(tt, 'top', `${y}px`);
-            R.setStyle(tt, 'left', `${x}px`);
-            R.setStyle(tt, 'transform', `translate(${tx}%, ${ty}%)`);
-            R.addClass(tt, `ngx-dm-tour-text-${pos[0]}-${pos[1]}`);
-
-            tts.push(tt);
         }
         if (tts.length == 0) {
             console.warn(`[ngx-dm-tour] There are no visible controls registered for the section "${sectionId}"`);
@@ -399,6 +290,135 @@ export class DmTourService {
             this._onClickRemove = R.listen(this.document, 'click', e => this.hideControlsHelp(e));
             this._onKeyupRemove = R.listen(this.document, 'keyup', e => this.hideControlsHelp(e));
         });
+    }
+
+    private _addControlHl(c: DmTourControl, mask: any): any {
+        const dr = this.document.body.getBoundingClientRect();
+        const MR = Math.round;
+        const R = this._r2;
+        const el = typeof c.el === 'string' ? this.document.querySelector(c.el) : c.el;
+        const b = this._getBoundaries(el);
+        console.log(c, el, b, isElemVisible(el));
+        if (!isElemVisible(el) || !b || b.width == 0 || b.height == 0) {
+            return null;
+        }
+        const shape = c.shape
+            ? c.shape
+            : this._cfg.defaultShape == 'auto'
+                ? (b.width > 200 || b.height > 200 ? 'square' : 'circle')
+                : this._cfg.defaultShape;
+        if (shape == 'square') {
+            const hl = R.createElement('rect', 'svg');
+            R.setAttribute(hl, 'x', '' + MR(b.left - 10));
+            R.setAttribute(hl, 'y', '' + MR(b.top - 10));
+            R.setAttribute(hl, 'width', '' + MR(b.width + 20));
+            R.setAttribute(hl, 'height', '' + MR(b.height + 20));
+            R.setAttribute(hl, 'rx', '8');
+            R.setAttribute(hl, 'fill', 'black');
+            R.setAttribute(hl, 'stroke', 'black');
+            R.setAttribute(hl, 'stroke-width', 'var(--ngx-dm-tour-hl-stroke-width, 15)');
+            R.setAttribute(hl, 'stroke-opacity', 'var(--ngx-dm-tour-hl-stroke-opacity, .3)');
+            R.appendChild(mask, hl);
+        }
+        else {
+            const hl = R.createElement('circle', 'svg');
+            const r = b.width > b.height ? b.width / 2 : b.height / 2;
+            R.setAttribute(hl, 'cx', '' + MR(b.left + b.width / 2));
+            R.setAttribute(hl, 'cy', '' + MR(b.top + b.height / 2));
+            R.setAttribute(hl, 'r', '' + MR(r + 10));
+            R.setAttribute(hl, 'fill', 'black');
+            R.setAttribute(hl, 'stroke', 'black');
+            R.setAttribute(hl, 'stroke-width', 'var(--ngx-dm-tour-hl-stroke-width, 15)');
+            R.setAttribute(hl, 'stroke-opacity', 'var(--ngx-dm-tour-hl-stroke-opacity, .3)');
+            R.appendChild(mask, hl);
+        }
+
+        const tt = R.createElement('div');
+        R.addClass(tt, 'ngx-dm-tour-text');
+        const tti = R.createElement('div');
+        R.addClass(tti, 'ngx-dm-tour-text-inner');
+        R.appendChild(tti, R.createText(c.text));
+        R.appendChild(tt, tti);
+        let pos = c.pos && c.pos != 'auto' ? c.pos.split('-') : null;
+        if (!pos) {
+            if (b.top > 250) {
+                pos = ['top', 'center'];
+            }
+            else if (dr.width - b.right > 250) {
+                pos = ['right', 'center'];
+            }
+            else if (dr.height - b.bottom > 250) {
+                pos = ['bottom', 'center'];
+            }
+            else if (b.left > 250) {
+                pos = ['left', 'center'];
+            }
+            else {
+                pos = ['center', 'center'];
+            }
+        }
+        else if (pos.length == 1) {
+            pos.push('center');
+        }
+        let x = MR(b.left + b.width / 2);
+        let y = MR(b.top + b.height / 2);
+        let tx = -50;
+        let ty = -50;
+        if (pos[0] == 'top') {
+            ty = -100;
+            y = b.top - 20;
+            if (pos[1] == 'left') {
+                tx = 0;
+                x = b.left;
+            }
+            else if (pos[1] == 'right') {
+                tx = -100;
+                x = b.right;
+            }
+        }
+        else if (pos[0] == 'bottom') {
+            ty = 0;
+            y = b.bottom + 20;
+            if (pos[1] == 'left') {
+                tx = 0;
+                x = b.left;
+            }
+            else if (pos[1] == 'right') {
+                tx = -100;
+                x = b.right;
+            }
+        }
+        else if (pos[0] == 'left') {
+            tx = -100;
+            x = b.left - 20;
+            if (pos[1] == 'top') {
+                ty = 0;
+                y = b.top;
+            }
+            else if (pos[1] == 'bottom') {
+                ty = -100;
+                y = b.bottom;
+            }
+        }
+        else if (pos[0] == 'right') {
+            tx = 0;
+            x = b.right + 20;
+            if (pos[1] == 'top') {
+                ty = 0;
+                y = b.top;
+            }
+            else if (pos[1] == 'bottom') {
+                ty = -100;
+                y = b.bottom;
+            }
+        }
+        // console.log(`[${c.id}] pos:`, pos, '\n\tb:', b, `-> ${x}x${y}`, '\n\tc:', c);
+        R.setStyle(tt, 'top', `${y}px`);
+        R.setStyle(tt, 'left', `${x}px`);
+        R.setStyle(tt, 'transform', `translate(${tx}%, ${ty}%)`);
+        R.addClass(tt, `ngx-dm-tour-text-${pos[0]}-${pos[1]}`);
+
+        return tt;
     }
 
     private _showHelp(sectionId: string) {
