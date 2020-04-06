@@ -44,6 +44,7 @@ export class DmTourService {
         if (!sectionId || !id || !el) {
             return;
         }
+        this._L(`registerControl, sectionId: ${sectionId}, is: ${id}, el:`, el);
         if (!this._controls[sectionId]) {
             this._controls[sectionId] = {};
         }
@@ -57,6 +58,7 @@ export class DmTourService {
         if (!this._controls[sectionId] || this._controls[sectionId][id]) {
             return;
         }
+        this._L(`unregisterControl, sectionId: ${sectionId}, is: ${id}`);
         delete this._controls[sectionId][id].el;
     }
 
@@ -179,7 +181,7 @@ export class DmTourService {
         return new Observable(obs => {
             this._http.get(`${this._cfg.rootPath}/${sectionId}/index.html`, { responseType: 'text' }).subscribe(
                 res => {
-                    // console.log('section html:', res);
+                    this._L('section html:', res);
                     this._hideLoading();
                     this._sections[sectionId].html = res;
                     obs.next();
@@ -195,7 +197,7 @@ export class DmTourService {
     private _showControlsHelp(sectionId: string) {
         const ids: string[] = this._controls[sectionId] ? Object.keys(this._controls[sectionId]) : [];
         if (!ids || ids.length == 0) {
-            console.warn(`[ngx-dm-tour] There are no visible controls registered for the section "${sectionId}"`);
+            this._W(`There are no visible controls registered for the section "${sectionId}"`);
             return;
         }
         const R = this._r2;
@@ -251,7 +253,7 @@ export class DmTourService {
             }
         }
         if (tts.length == 0) {
-            console.warn(`[ngx-dm-tour] There are no visible controls registered for the section "${sectionId}"`);
+            this._W(`There are no visible controls registered for the section "${sectionId}"`);
             return;
         }
         R.appendChild(defs, mask);
@@ -298,8 +300,9 @@ export class DmTourService {
         const R = this._r2;
         const el = typeof c.el === 'string' ? this.document.querySelector(c.el) : c.el;
         const b = this._getBoundaries(el);
-        console.log(c, el, b, isElemVisible(el));
-        if (!isElemVisible(el) || !b || b.width == 0 || b.height == 0) {
+        const vis = isElemVisible(el);
+        this._L('control:', c, '\nelem:', el, '\nboundaries:', b, '\nisVisible:', vis);
+        if (!vis || !b || b.width == 0 || b.height == 0) {
             return null;
         }
         const shape = c.shape
@@ -486,7 +489,7 @@ export class DmTourService {
         this.document.activeElement.blur();
         this._hlVisible = true;
         R.appendChild(this.document.body, this._root);
-        // console.log('_root', this._root);
+        this._L('_root', this._root);
         setTimeout(() => {
             R.addClass(this._root, 'ngx-dm-tour-show');
             this._onClickRemove = R.listen(this.document, 'click', e => this.hideControlsHelp(e));
@@ -566,7 +569,7 @@ export class DmTourService {
     }
 
     private _handleLoadError(err: any) {
-        console.warn('[ngx-dm-tour] load error:', err);
+        this._W('[ngx-dm-tour] load error:', err);
     }
 
     private _addGlobalStyles() {
@@ -581,6 +584,18 @@ export class DmTourService {
         root.innerHTML = GLOBAL_STYLES;
 
         R.appendChild(this.document.head, root);
+    }
+
+    private _L(...args) {
+        if (this._cfg.debug > 0) {
+            console.log('[ngx-dm-tour]', ...args);
+        }
+    }
+
+    private _W(...args) {
+        if (this._cfg.debug > 1) {
+            console.warn('[ngx-dm-tour]', ...args);
+        }
     }
 
 }

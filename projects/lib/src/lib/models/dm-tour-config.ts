@@ -8,6 +8,7 @@ export interface IDmTourConfig {
     loaderHtml?: string;
     defaultShape?: DmTourShapeType;
     customCssClass?: string;
+    debug?: number;
 }
 
 export class DmTourConfig implements IDmTourConfig {
@@ -29,6 +30,7 @@ export class DmTourConfig implements IDmTourConfig {
     `;
     defaultShape: DmTourShapeType = 'auto';
     customCssClass: string;
+    debug: number = 0;
 
     constructor(json?: IDmTourConfig) {
         this.apply(json);

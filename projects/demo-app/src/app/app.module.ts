@@ -13,7 +13,7 @@ registerLocaleData(en);
 
 import { DmTableModule } from '@dimanoid/ngx-dm-table';
 
-import { DmTourModule } from '@dimanoid/ngx-dm-tour';
+import { DmTourModule, DM_TOUR_CONF } from '@dimanoid/ngx-dm-tour';
 
 import { AppComponent } from './app.component';
 
@@ -30,6 +30,7 @@ import { AppComponent } from './app.component';
     ],
     providers: [
         { provide: NZ_I18N, useValue: en_US },
+        { provide: DM_TOUR_CONF, useValue: { debug: 0 } }
     ],
     bootstrap: [AppComponent]
 })
