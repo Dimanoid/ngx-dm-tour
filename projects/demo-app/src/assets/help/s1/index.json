@@ -1,6 +1,11 @@
 {
     "controls": [
         {
+            "id": "fr",
+            "text": "fr / Floating right",
+            "pos": "left-top"
+        },
+        {
             "id": "p1",
             "text": "p1 / Some description for the control - bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla",
             "shape": "square"

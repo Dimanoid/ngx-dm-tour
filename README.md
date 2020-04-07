@@ -8,7 +8,7 @@ Demo page: https://dimanoid.github.io/ngx-dm-tour/
 
 Install the library and dependecies:
 
-  `npm i -S @dimanoid/ngx-dm-tour`
+  `npm i -S resize-observer-polyfill @dimanoid/ngx-dm-tour`
 
 Add module to imports:
 

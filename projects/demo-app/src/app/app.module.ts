@@ -30,7 +30,7 @@ import { AppComponent } from './app.component';
     ],
     providers: [
         { provide: NZ_I18N, useValue: en_US },
-        { provide: DM_TOUR_CONF, useValue: { debug: 0 } }
+        { provide: DM_TOUR_CONF, useValue: { debug: 2 } }
     ],
     bootstrap: [AppComponent]
 })
