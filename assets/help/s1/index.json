@@ -1,0 +1,141 @@
+{
+    "controls": [
+        {
+            "id": "fr",
+            "text": "fr / Floating right",
+            "pos": "left-top"
+        },
+        {
+            "id": "p1",
+            "text": "p1 / Some description for the control - bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla",
+            "shape": "square"
+        },
+        {
+            "id": "p2",
+            "text": "p2 / Some description for the control - bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla",
+            "pos": "bottom-left"
+        },
+        {
+            "id": "tb1",
+            "text": "tb1 / Some description for the control - bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla",
+            "shape": "square",
+            "pos": "left-top"
+        },
+        {
+            "id": "be",
+            "text": "be / Some description for the control - bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla"
+        },
+        {
+            "id": "tobe",
+            "text": "tobe / Some description for the control - bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla",
+            "shape": "square"
+        },
+        {
+            "id": "poi1",
+            "text": "poi1 / Some description for the control - bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla"
+        },
+        {
+            "id": "poi2",
+            "text": "poi2 / Some description for the control - bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla",
+            "pos": "bottom"
+        },
+        {
+            "id": "btn1",
+            "text": "btn1 / Some description for the control - bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla",
+            "pos": "bottom-right"
+        },
+        {
+            "id": "pos-tl",
+            "text": "pos: top-left",
+            "pos": "top-left",
+            "shape": "square"
+        },
+        {
+            "id": "pos-t",
+            "text": "pos: top",
+            "pos": "top",
+            "shape": "square"
+        },
+        {
+            "id": "pos-tr",
+            "text": "pos: top-right",
+            "pos": "top-right",
+            "shape": "square"
+        },
+        {
+            "id": "pos-bl",
+            "text": "pos: bottom-left",
+            "pos": "bottom-left",
+            "shape": "square"
+        },
+        {
+            "id": "pos-b",
+            "text": "pos: bottom",
+            "pos": "bottom",
+            "shape": "square"
+        },
+        {
+            "id": "pos-br",
+            "text": "pos: bottom-right",
+            "pos": "bottom-right",
+            "shape": "square"
+        },
+        {
+            "id": "pos-lt",
+            "text": "pos: left-top",
+            "pos": "left-top",
+            "shape": "square"
+        },
+        {
+            "id": "pos-l",
+            "text": "pos: left",
+            "pos": "left",
+            "shape": "square"
+        },
+        {
+            "id": "pos-lb",
+            "text": "pos: left-bottom",
+            "pos": "left-bottom",
+            "shape": "square"
+        },
+        {
+            "id": "pos-rt",
+            "text": "pos: right-top",
+            "pos": "right-top",
+            "shape": "square"
+        },
+        {
+            "id": "pos-r",
+            "text": "pos: right",
+            "pos": "right",
+            "shape": "square"
+        },
+        {
+            "id": "pos-rb",
+            "text": "pos: right-bottom",
+            "pos": "right-bottom",
+            "shape": "square"
+        },
+        {
+            "id": "table",
+            "children": [
+                {
+                    "el": "th.ngx-dmt-sorted > div.ngx-dmt-column-sort-container",
+                    "text": "children -> th.ngx-dmt-sorted > div.ngx-dmt-column-sort-container selector"
+                },
+                {
+                    "el": "div.ngx-dmt-column-title",
+                    "text": "children -> div.ngx-dmt-column-title selector",
+                    "shape": "square",
+                    "pos": "bottom-right"
+                },
+                {
+                    "el": "tr:nth-child(2) > td:nth-child(3) > div > b",
+                    "text": "children -> tr:nth-child(2) > td:nth-child(3) > div > b selector",
+                    "shape": "square",
+                    "pos": "bottom-left"
+                }
+            ]
+        }
+    ]
+}

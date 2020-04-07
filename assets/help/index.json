@@ -1,0 +1,13 @@
+{
+    "sections": [
+        {
+            "id": "s0",
+            "title": "Example section \"s0\" - left panel",
+            "html": "Here may be <b>short</b> <i style='color: red'>inline</i> HTML<br>with the description of the section."
+        },
+        {
+            "id": "s1",
+            "title": "Example section s1 title"
+        }
+    ]
+}

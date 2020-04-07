@@ -1,0 +1,15 @@
+{
+    "controls": [
+        {
+            "id": "help",
+            "text": "This button will show help for the right side section",
+            "shape": "square",
+            "pos": "top-left"
+        },
+        {
+            "id": "help2",
+            "text": "This button will highlight controls on the right side section",
+            "shape": "square"
+        }
+    ]
+}
