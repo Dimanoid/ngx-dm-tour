@@ -3,7 +3,14 @@ import { HttpClient } from '@angular/common/http';
 
 import { DmTourService } from './dm-tour.service';
 
+class ResizeObserver {
+    observe() {}
+    unobserve() {}
+    disconnect() {}
+}
+
 describe('DmTourService', () => {
+    jest.mock('resize-observer-polyfill', () => { return ResizeObserver; });
     let spectator: SpectatorService<DmTourService>;
     const createService = createServiceFactory({
         service: DmTourService,

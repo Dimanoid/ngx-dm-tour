@@ -41,9 +41,11 @@ export class DmTourService {
                 err => this._handleLoadError(err)
             );
         }
-        const resized = new Subject<void>();
-        new ResizeObserver(() => resized.next()).observe(this.document.body);
-        resized.pipe(debounceTime(500)).subscribe(() => this._resized());
+        if (ResizeObserver) {
+            const resized = new Subject<void>();
+            new ResizeObserver(() => resized.next()).observe(this.document.body);
+            resized.pipe(debounceTime(500)).subscribe(() => this._resized());
+        }
     }
 
     private _resized() {
