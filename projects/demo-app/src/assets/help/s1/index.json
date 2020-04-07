@@ -45,6 +45,78 @@
             "pos": "bottom-right"
         },
         {
+            "id": "pos-tl",
+            "text": "pos: top-left",
+            "pos": "top-left",
+            "shape": "square"
+        },
+        {
+            "id": "pos-t",
+            "text": "pos: top",
+            "pos": "top",
+            "shape": "square"
+        },
+        {
+            "id": "pos-tr",
+            "text": "pos: top-right",
+            "pos": "top-right",
+            "shape": "square"
+        },
+        {
+            "id": "pos-bl",
+            "text": "pos: bottom-left",
+            "pos": "bottom-left",
+            "shape": "square"
+        },
+        {
+            "id": "pos-b",
+            "text": "pos: bottom",
+            "pos": "bottom",
+            "shape": "square"
+        },
+        {
+            "id": "pos-br",
+            "text": "pos: bottom-right",
+            "pos": "bottom-right",
+            "shape": "square"
+        },
+        {
+            "id": "pos-lt",
+            "text": "pos: left-top",
+            "pos": "left-top",
+            "shape": "square"
+        },
+        {
+            "id": "pos-l",
+            "text": "pos: left",
+            "pos": "left",
+            "shape": "square"
+        },
+        {
+            "id": "pos-lb",
+            "text": "pos: left-bottom",
+            "pos": "left-bottom",
+            "shape": "square"
+        },
+        {
+            "id": "pos-rt",
+            "text": "pos: right-top",
+            "pos": "right-top",
+            "shape": "square"
+        },
+        {
+            "id": "pos-r",
+            "text": "pos: right",
+            "pos": "right",
+            "shape": "square"
+        },
+        {
+            "id": "pos-rb",
+            "text": "pos: right-bottom",
+            "pos": "right-bottom",
+            "shape": "square"
+        },
+        {
             "id": "table",
             "children": [
                 {

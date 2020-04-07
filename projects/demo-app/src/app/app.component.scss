@@ -56,6 +56,14 @@
                 height: 20px;
                 transform: rotate(45deg);
             }
+            .dm-pos-demo {
+                margin: 20px;
+                border: 1px solid rgba(0, 100, 100);
+                border-radius: 4px;
+                background-color: rgba(0, 100, 100, .3);
+                width: 150px;
+                height: 100px;
+            }
         }
     }
 }
