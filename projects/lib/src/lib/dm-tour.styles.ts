@@ -149,6 +149,7 @@ export const GLOBAL_STYLES = `
         background: #0099e4;
         content: " ";
         position: absolute;
+        z-index: -1
     }
     .ngx-dm-tour-text.ngx-dm-tour-text-top-left:after {
         bottom: -8px;

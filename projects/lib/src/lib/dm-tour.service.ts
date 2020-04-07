@@ -449,7 +449,7 @@ export class DmTourService {
         // console.log(`[${c.id}] pos:`, pos, '\n\tb:', b, `-> ${x}x${y}`, '\n\tc:', c);
         R.setStyle(tt, 'top', `${y}px`);
         R.setStyle(tt, 'left', `${x}px`);
-        R.setStyle(tt, 'transform', `translate(${tx}%, ${ty}%) scale(1.01)`);
+        R.setStyle(tt, 'transform', `translate(${tx}%, ${ty}%) scale(1)`);
         R.addClass(tt, `ngx-dm-tour-text-${pos[0]}-${pos[1]}`);
 
         return tt;
