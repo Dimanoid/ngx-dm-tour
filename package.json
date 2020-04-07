@@ -1,6 +1,6 @@
 {
     "name": "@dimanoid/ngx-dm-tour",
-    "version": "0.2.1",
+    "version": "0.2.2",
     "scripts": {
         "build": "ng build lib",
         "build:demo": "ng build --aot --prod --base-href /ngx-dm-tour/ demo-app",
